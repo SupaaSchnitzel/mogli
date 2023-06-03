@@ -1,0 +1,73 @@
+openapi: '3.0.2'
+
+info:
+  title: Mogli API
+  version: '1.0'
+
+servers:
+  - url: https://api.mogli.local/
+
+components:
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.mogli.local/.well-known/openid-configuration
+
+  schemas:
+    Game:
+      type: object
+      properties:
+        id: { type: integer }
+        displayname: { type: string }
+
+security:
+  - openId:
+    - games_read
+    - games_write
+
+paths:
+  /games:
+    get:
+      security:
+        - openId:
+          - games_read
+      
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+
+  /games/{gameid}:
+    parameters:
+      - name: gameid
+        in: path
+        schema:
+          type: integer
+        required: true
+        description: ID of the game for which to fetch information
+    get:
+      security:
+        - openId:
+          - games_read
+      
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Game'
+    delete:
+      security:
+        - openId:
+          - games_write
+      
+      responses:
+        '200':
+          description: OK
