@@ -1,5 +1,5 @@
 
-<h3 align="center">mogly</h3>
+<h3 align="center">mogli</h3>
 
 <div align="center">
 
