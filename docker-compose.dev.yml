@@ -14,7 +14,6 @@ services:
       - auth
   db:
     image: postgres:15.3-alpine3.18
-    container_name: db
     restart: always
     environment:
      - POSTGRES_USER=postgres
@@ -23,7 +22,6 @@ services:
      - "5432:5432"
   auth:
     image: quay.io/keycloak/keycloak:21.1.1
-    container_name: auth
     restart: always
     environment:
       - KEYCLOAK_ADMIN=admin
