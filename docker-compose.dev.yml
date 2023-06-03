@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  devenv:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    links:
+      - "db:db.mogli.local"
+      - "auth:auth.mogli.local"
+    extra_hosts:
+      - "api.mogli.local:127.0.0.1"
+    depends_on:
+      - db
+      - auth
+  db:
+    image: postgres:15.3-alpine3.18
+    container_name: db
+    restart: always
+    environment:
+     - POSTGRES_USER=postgres
+     - POSTGRES_PASSWORD=postgres
+    ports:
+     - "5432:5432"
+  auth:
+    image: quay.io/keycloak/keycloak:21.1.1
+    container_name: auth
+    restart: always
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8080:8080"
+    command:
+      - start-dev
