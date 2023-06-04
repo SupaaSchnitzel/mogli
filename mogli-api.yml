@@ -19,6 +19,11 @@ components:
       properties:
         id: { type: integer }
         displayname: { type: string }
+    User:
+      type: object
+      properties:
+        id: { type: string }
+        displayname: { type: string }
 
 security:
   - openId:
@@ -31,7 +36,13 @@ paths:
       security:
         - openId:
           - games_read
-      
+      parameters:
+        - name: platform
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filters the games by platform
       responses:
         '200':
           description: OK
@@ -71,3 +82,95 @@ paths:
       responses:
         '200':
           description: OK
+  /users:
+    get:
+      security:
+        - openId:
+          - games_read
+      
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{userid}:
+    parameters:
+      - name: userid
+        in: path
+        schema:
+          type: integer
+        required: true
+        description: ID of the user for which to fetch information
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/User'
+  
+  /users/{userid}/games:
+    parameters:
+      - name: userid
+        in: path
+        schema:
+          type: integer
+        required: true
+        description: ID of the user for which to fetch information
+      - name: platform
+        in: query
+        schema:
+          type: string
+        required: false
+        description: Filters the games by platform
+    get:
+      security:
+        - openId:
+          - games_read
+      
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+  
+  /users/{userid}/games/{gameid}:
+    parameters:
+      - name: gameid
+        in: path
+        schema:
+          type: integer
+        required: true
+        description: ID of the game for which to fetch information
+    get:
+      security:
+        - openId:
+          - games_read
+      
+      parameters:
+        - name: userid
+          in: path
+          schema:
+            type: integer
+          required: true
+          description: ID of the user for which to fetch information
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Game'
