@@ -2,6 +2,9 @@ include(FetchContent)
 
 # Library
 add_library(mogli STATIC
+	mogli/libmgr/manager.cpp
+	mogli/rest/endpoint.cpp
+	mogli/logging.cpp
 	mogli/sample.cpp
 )
 target_compile_features(mogli PUBLIC cxx_std_23)
@@ -64,6 +67,6 @@ endif()
 FetchContent_Declare(spdlog GIT_REPOSITORY https://github.com/gabime/spdlog.git GIT_TAG v1.11.0)
 FetchContent_MakeAvailable(spdlog)
 target_link_libraries(mogli PRIVATE spdlog::spdlog)
-target_include_directories(mogli PUBLIC ${spdlog_SOURCE_DIR}/include)
-target_link_libraries(mogliexe spdlog::spdlog)
-target_include_directories(mogliexe PUBLIC ${spdlog_SOURCE_DIR}/include)
+# target_include_directories(mogli PUBLIC ${spdlog_SOURCE_DIR}/include)
+target_link_libraries(mogliexe spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
+# target_include_directories(mogliexe PUBLIC ${spdlog_SOURCE_DIR}/include)
