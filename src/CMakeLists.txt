@@ -3,6 +3,7 @@ include(FetchContent)
 # Library
 add_library(mogli STATIC
 	mogli/libmgr/manager.cpp
+	mogli/rest/controller/controller.cpp
 	mogli/rest/endpoint.cpp
 	mogli/logging.cpp
 	mogli/sample.cpp
@@ -33,23 +34,12 @@ FetchContent_GetProperties(oatpp_lib)
 target_include_directories(mogli PRIVATE ${oatpp_lib_SOURCE_DIR}/src/)
 target_include_directories(mogliexe PRIVATE ${oatpp_lib_SOURCE_DIR}/src/)
 target_link_libraries(mogli PRIVATE oatpp)
+#Config for OATPP Modules
+set(OATPP_MODULES_LOCATION "CUSTOM")
+set(OATPP_DIR_SRC ${oatpp_lib_SOURCE_DIR}/src/)
+set(OATPP_DIR_LIB ${oatpp_lib_BINARY_DIR}/src/)
 
 if (false)
-	#Config for OATPP Modules
-	set(OATPP_MODULES_LOCATION "CUSTOM")
-	set(oatpp_DIR ${oatpp_lib_BINARY_DIR}/src/)
-	# Oatpp-SWAGGER for REST API
-	FetchContent_Declare(
-		oatpp_swagger
-		GIT_REPOSITORY https://github.com/oatpp/oatpp-swagger.git
-		GIT_TAG 1.3.0
-	)
-	FetchContent_MakeAvailable(oatpp_swagger)
-	FetchContent_GetProperties(oatpp_swagger)
-	target_include_directories(mogli PRIVATE ${oatpp_swagger_SOURCE_DIR}/src/)
-	target_include_directories(mogliexe PRIVATE ${oatpp_swagger_SOURCE_DIR}/src/)
-	target_link_libraries(mogli PRIVATE oatpp-swagger)
-
 	# Oatpp-postgres for REST API
 	FetchContent_Declare(
 		oatpp_postgres

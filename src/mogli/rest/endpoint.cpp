@@ -1,7 +1,10 @@
 #include <mogli/rest/endpoint.hpp>
 
+#include <mogli/rest/controller/controller.hpp>
+
 using RESTEndpoint = mogli::rest::RESTEndpoint;
 using RESTConfig = mogli::rest::RESTConfig;
+using Controller = mogli::rest::Controller;
 
 unsigned RESTEndpoint::InstanceCounter = 0;
 
@@ -12,9 +15,19 @@ bool RESTEndpoint::init() {
 	if (RESTEndpoint::InstanceCounter == 0)
 		oatpp::base::Environment::init();
 	++RESTEndpoint::InstanceCounter;
-	
+
+	OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::data::mapping::ObjectMapper>, apiObjectMapper)([]{
+		auto objectMapper = oatpp::parser::json::mapping::ObjectMapper::createShared();
+		objectMapper->getDeserializer()->getConfig()->allowUnknownFields = false;
+		return objectMapper;
+	}());
+
+	// 
 	logger->info("Initializing HTTP router");
 	router = HttpRouter::createShared();
+
+	auto controller = router->addController(Controller::createShared());
+
 	logger->info("Initializing connection handler");
 	auto connectionHandler = HttpConnectionHandler::createShared(router);
 	logger->info("Initializing TCP connection provider");
