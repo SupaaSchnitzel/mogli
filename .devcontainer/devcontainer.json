@@ -25,7 +25,8 @@
 				"ms-vscode.cpptools-extension-pack",
 				"ms-vscode.cmake-tools",
 				"cschlosser.doxdocgen",
-				"github.vscode-github-actions"
+				"github.vscode-github-actions",
+				"rohinivsenthil.postcode"
 			]
 		}
 	}
