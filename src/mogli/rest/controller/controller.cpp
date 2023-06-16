@@ -6,36 +6,36 @@
 using namespace mogli::rest;
 
 std::shared_ptr<Controller::Response> Controller::getGames() {
-	// TODO: implement
+	/** \todo implement */
 	return createResponse(Status::CODE_200, "TODO");
 }
 
 std::shared_ptr<Controller::Response> Controller::getGame(const oatpp::String& gameid) {
-	// TODO: implement
+	/** \todo implement */
 	return createResponse(Status::CODE_200, "TODO");
 }
 
 std::shared_ptr<Controller::Response> Controller::deleteGame(const oatpp::String& gameid) {
-	// TODO: implement
+	/** \todo implement */
 	return createResponse(Status::CODE_200, "TODO");
 }
 
 std::shared_ptr<Controller::Response> Controller::getUsers() {
-	// TODO: implement
+	/** \todo implement */
 	return createResponse(Status::CODE_200, "TODO");
 }
 
 std::shared_ptr<Controller::Response> Controller::getUser(const oatpp::String& userid) {
-	// TODO: implement
+	/** \todo implement */
 	return createResponse(Status::CODE_200, "TODO");
 }
 
 std::shared_ptr<Controller::Response> Controller::getGamesFromUser(const oatpp::String& userid) {
-	// TODO: implement
+	/** \todo implement */
 	return createResponse(Status::CODE_200, "TODO");
 }
 
 std::shared_ptr<Controller::Response> Controller::getGameFromUser(const oatpp::String& userid, const oatpp::String& gameid) {
-	// TODO: implement
+	/** \todo implement */
 	return createResponse(Status::CODE_200, "TODO");
 }

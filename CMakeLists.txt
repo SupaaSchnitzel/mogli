@@ -7,6 +7,7 @@ project(mogli VERSION ${MOGLI_VERSION} LANGUAGES CXX)
 
 option(BUILD_TESTS "Build tests" ON)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(src)
 

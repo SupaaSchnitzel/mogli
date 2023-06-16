@@ -1,106 +1,55 @@
-
-<h3 align="center">mogli</h3>
-
-<div align="center">
-
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![License](https://img.shields.io/badge/license-Unlicense-blue.svg)](/LICENSE)
-
-</div>
-
----
-
-<p align="center"> This is My Own Games LIbrary or mogli for short. This Project exists to make a netflix like library from your game installer folder.
-    <br> 
+<h1 align="center">mogli</h1>
+<p align="center">
+    <a href="#"><img src="https://img.shields.io/badge/status-active-success.svg" alt=Status/></a>
+    <a href="/LICENSE"><img src="https://img.shields.io/badge/license-Unlicense-blue.svg" alt=License/></a>
+</p>
+<p align="center">
+    "<b>M</b>y <b>O</b>wn <b>G</b>ame-<b>LI</b>brary" (mogli) is a self-hosted tool for managing your own library of DRM-free game installers.
 </p>
 
-## 📝 Table of Contents
+## 🧐 About
 
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Deployment](#deployment)
-- [Usage](#usage)
-- [Built Using](#built_using)
-- [TODO](./TODO.md)
-- [Contributing](../CONTRIBUTING.md)
-- [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
+"<b>M</b>y <b>O</b>wn <b>G</b>ame-<b>LI</b>brary" (mogli) is a self-hosted tool for managing your own library of DRM-free game installers. We started this project because we wanted to be able to host our own games library on a home server, like it is possible with other collections. Since there is no such tool available at the moment, we decided to build it ourselves.
 
-## 🧐 About <a name = "about"></a>
+## 🚀 Deployment
+`TODO`
 
-This is My Own Games LIbrary or mogli for short. This Project exists to make a netflix like library from your game installer folder. We started this project because we wanted to be able to host our own games library on a home server, like it is possible with other collections. Since there is no such tool available at the moment, we decided to build it ourselves.
 
-## 🏁 Getting Started <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
-
+## 🏁 Getting Started for Development
+`TODO`
 ### Prerequisites
+`TODO`
 
-What things you need to install the software and how to install them.
+### Developing
+`TODO`
 
-```
-Give examples
-```
 
-### Installing
 
-A step by step series of examples that tell you how to get a development env running.
+## 🔧 Running the tests
+### Unit Tests
+`TODO`
 
-Say what the step will be
+### Codestyle Tests
+`TODO`
 
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
+### Linter
+```bash
+cppcheck --enable=all --project=build/compile_commands.json -ibuild  --suppress=*:build/* --suppress=missingIncludeSystem --cppcheck-build-dir=build/cppcheck
 ```
 
-End with an example of getting some data out of the system or using it for a little demo.
-
-## 🔧 Running the tests <a name = "tests"></a>
-
-Explain how to run the automated tests for this system.
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## 🎈 Usage <a name="usage"></a>
-
-Add notes about how to use the system.
-
-## 🚀 Deployment <a name = "deployment"></a>
-
-Add additional notes about how to deploy this on a live system.
-
-## ⛏️ Built Using <a name = "built_using"></a>
-
-- [PostgreSQL](https://www.postgresql.org) - Database
 ## ✍️ Authors <a name = "authors"></a>
+<a href = "https://github.com/SupaaSchnitzel/mogli/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=SupaaSchnitzel/mogli"/>
+</a>
 
-- [@huntedcookie](https://github.com/huntedcookie) - Initial work
-- [@SupaaSchnitzel](https://github.com/SupaaSchnitzel) - Initial work
-- [@TheMrSheldon](https://github.com/TheMrSheldon) - Idea & Initial work
 
-See also the list of [contributors](https://github.com/) who participated in this project.
 
-## 🎉 Acknowledgements <a name = "acknowledgement"></a>
-
-- Hat tip to anyone whose code was used
-- Inspiration
-- References
+## 🎉 Acknowledgements
+We have made great use of the following awesome projects:
+ - [Catch2](https://github.com/catchorg/Catch2)
+ - [CLI11](https://github.com/CLIUtils/CLI11)
+ - [Doxygen](https://www.doxygen.nl/)
+ - [Oat++](https://oatpp.io/)
+ - [PostgreSQL](https://www.postgresql.org)
+ - [spdlog](https://github.com/gabime/spdlog)

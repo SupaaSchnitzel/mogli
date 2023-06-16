@@ -4,6 +4,8 @@
         120
     ],
     "files.exclude": {
+        "docs/": true,
         "build/": true
     },
+    "C_Cpp.autoAddFileAssociations": false,
 }

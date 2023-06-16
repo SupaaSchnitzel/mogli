@@ -9,7 +9,7 @@ RUN apt-get update
 RUN apt-get -y install g++-12 cmake git
 
 # Needed for the dev environment
-RUN apt-get -y install cppcheck
+RUN apt-get -y install cppcheck doxygen graphviz
 
 # Dependencies
 RUN apt-get -y install libiddawc-dev

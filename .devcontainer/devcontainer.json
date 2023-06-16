@@ -26,7 +26,8 @@
 				"ms-vscode.cmake-tools",
 				"cschlosser.doxdocgen",
 				"github.vscode-github-actions",
-				"rohinivsenthil.postcode"
+				"rohinivsenthil.postcode",
+				"jbenden.c-cpp-flylint"
 			]
 		}
 	}
