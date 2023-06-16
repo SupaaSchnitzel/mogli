@@ -1,11 +1,16 @@
+<div align="center">
+<a href="https://github.com/SupaaSchnitzel/mogli">
+    <img src="icon.svg" alt="Logo" width="100" height="100"/>
+</a>
 <h1 align="center">mogli</h1>
+
 <p align="center">
+    "<b>M</b>y <b>O</b>wn <b>G</b>ame-<b>LI</b>brary" (mogli) is a self-hosted tool for managing your own library of DRM-free game installers.<br/>
     <a href="#"><img src="https://img.shields.io/badge/status-active-success.svg" alt=Status/></a>
     <a href="/LICENSE"><img src="https://img.shields.io/badge/license-Unlicense-blue.svg" alt=License/></a>
 </p>
-<p align="center">
-    "<b>M</b>y <b>O</b>wn <b>G</b>ame-<b>LI</b>brary" (mogli) is a self-hosted tool for managing your own library of DRM-free game installers.
-</p>
+</div>
+
 
 ## 🧐 About
 
