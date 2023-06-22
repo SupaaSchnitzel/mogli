@@ -1,8 +1,8 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
 
 info:
   title: Mogli API
-  version: '1.0'
+  version: "1.0"
 
 servers:
   - url: https://api.mogli.local/
@@ -19,24 +19,63 @@ components:
       properties:
         id: { type: integer }
         displayname: { type: string }
+        tags: { type: array, items: { type: string } }
     User:
       type: object
       properties:
         id: { type: string }
         displayname: { type: string }
+    ProblemJSON: # See RFC 7807 (https://datatracker.ietf.org/doc/html/rfc7807)
+      type: object
+      properties:
+        type:
+          type: string
+          description: >
+            A URI reference [RFC3986] that identifies the problem type. This specification encourages that, when
+            dereferenced, it provide human-readable documentation for the problem type (e.g., using HTML
+            [W3C.REC-html5-20141028]). When this member is not present, its value is assumed to be "about:blank".
+        title:
+          type: string
+          description: >
+            A short, human-readable summary of the problem type. It SHOULD NOT change from occurrence to occurrence of
+            the problem, except for purposes of localization (e.g., using proactive content negotiation; see [RFC7231],
+            Section 3.4).
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+        instance:
+          type: string
+          description: >
+            A URI reference that identifies the specific occurrence of the problem. It may or may not yield further
+            information if dereferenced.
 
 security:
   - openId:
-    - games_read
-    - games_write
+      - games_read
+      - games_write
 
 paths:
   /games:
     get:
       security:
         - openId:
-          - games_read
+            - games_read
       parameters:
+        - name: fields
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          required: false
+          description: Filters the fields that should be returned
+          examples:
+            allfields:
+              value: null
+              summary: All fields should be returned
+            idonly:
+              value: ["id", "displayname"]
+              summary: Only return the games' ids and displaynames
         - name: platform
           in: query
           schema:
@@ -44,14 +83,54 @@ paths:
           required: false
           description: Filters the games by platform
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Game'
+                  $ref: "#/components/schemas/Game"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemJSON"
+    post:
+      security:
+        - openId:
+            - games_write
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                gameinfo:
+                  $ref: "#/components/schemas/Game"
+                installers:
+                  type: string
+                  format: binary
+            encoding:
+              gameinfo:
+                contentType: application/json
+
+      responses:
+        "401":
+          description: Created
+          headers:
+            Location:
+              type: string
+              description: The url to the newly created resource.
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemJSON"
+
 
   /games/{gameid}:
     parameters:
@@ -64,39 +143,57 @@ paths:
     get:
       security:
         - openId:
-          - games_read
-      
+            - games_read
+
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Game'
+                $ref: "#/components/schemas/Game"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemJSON"
     delete:
       security:
         - openId:
-          - games_write
-      
+            - games_write
+
       responses:
-        '200':
+        "200":
           description: OK
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemJSON"
   /users:
     get:
       security:
         - openId:
-          - games_read
-      
+            - games_read
+
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: "#/components/schemas/User"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemJSON"
 
   /users/{userid}:
     parameters:
@@ -108,14 +205,20 @@ paths:
         description: ID of the user for which to fetch information
     get:
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/User'
-  
+                $ref: "#/components/schemas/User"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemJSON"
+
   /users/{userid}/games:
     parameters:
       - name: userid
@@ -133,18 +236,24 @@ paths:
     get:
       security:
         - openId:
-          - games_read
-      
+            - games_read
+
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Game'
-  
+                  $ref: "#/components/schemas/Game"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemJSON"
+
   /users/{userid}/games/{gameid}:
     parameters:
       - name: gameid
@@ -156,8 +265,8 @@ paths:
     get:
       security:
         - openId:
-          - games_read
-      
+            - games_read
+
       parameters:
         - name: userid
           in: path
@@ -167,10 +276,16 @@ paths:
           description: ID of the user for which to fetch information
 
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Game'
+                $ref: "#/components/schemas/Game"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemJSON"
