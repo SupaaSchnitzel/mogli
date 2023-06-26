@@ -39,7 +39,7 @@ namespace mogli::lib {
 		 * @brief Queries the gamedb specified in the config and returns the metadata for the given gameTitle.
 		 *
 		 * @param gameTitle Title of the game
-		 * @return Returns a json of the game Metadata
+		 * @return Returns a string formatted as json of the game Metadata
 		 */
 		std::string getGameMetadata(GameID gameTitle);
 
@@ -47,7 +47,7 @@ namespace mogli::lib {
 		 * @brief Queries the gogdb gamedb and returns the metadata for the given gameTitle.
 		 *
 		 * @param gameTitle Title of the game
-		 * @return Returns a json of the game Metadata
+		 * @return Returns a string formatted as json of the game Metadata
 		 */
 		std::string getGameMetadataGogdb(GameID gameTitle);
 
@@ -55,7 +55,7 @@ namespace mogli::lib {
 		 * @brief Queries the Steam gamedb and returns the metadata for the given gameTitle.
 		 *
 		 * @param gameTitle Title of the game
-		 * @return Returns a json of the game Metadata
+		 * @return Returns a string formatted as json of the game Metadata
 		 */
 		std::string getGameMetadataSteam(GameID gameTitle);
 
@@ -63,7 +63,7 @@ namespace mogli::lib {
 		 * @brief Queries the gog gamedb and returns the metadata for the given gameTitle.
 		 *
 		 * @param gameTitle Title of the game
-		 * @return Returns a json of the game Metadata
+		 * @return Returns a string formatted as json of the game Metadata
 		 */
 		std::string getGameMetadataGog(GameID gameTitle);
 

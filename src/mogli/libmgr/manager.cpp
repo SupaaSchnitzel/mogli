@@ -14,6 +14,8 @@ std::string LibraryManager::getGameMetadata(GameID gameTitle) {
 		return getGameMetadataGog(gameTitle);
 	case gogdb:
 		return getGameMetadataGogdb(gameTitle);
+	default:
+		return "Nothing Found";
 	}
 }
 

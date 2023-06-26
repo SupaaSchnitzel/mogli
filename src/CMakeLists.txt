@@ -3,6 +3,10 @@ include(FetchContent)
 # Library
 add_library(mogli STATIC
 	mogli/libmgr/manager.cpp
+	mogli/libmgr/provider/gogprovider.cpp
+	mogli/libmgr/provider/gogdbprovider.cpp
+	mogli/libmgr/provider/steamprovider.cpp
+	mogli/libmgr/provider/localprovider.cpp
 	mogli/rest/controller/controller.cpp
 	mogli/rest/endpoint.cpp
 	mogli/logging.cpp
