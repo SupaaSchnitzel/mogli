@@ -4,9 +4,8 @@
 #include <mogli/libmgr/manager.hpp>
 #include <mogli/logging.hpp>
 #include <mogli/mogli.hpp>
-#include <mogli/rest/endpoint.hpp>
 #include <mogli/rest/config.hpp>
-
+#include <mogli/rest/endpoint.hpp>
 
 mogli::rest::RESTEndpoint* endpoint = nullptr;
 void sigintHandler(int signal) {
@@ -18,13 +17,14 @@ int main(int argc, char* argv[]) {
 	auto logger = mogli::log::getLogger("Mogli");
 	logger->info("Launching mogli v.{}", mogli::version);
 	mogli::lib::PostgreGameDatabase database;
-	mogli::lib::LibraryManager libmgr("/library", database);
+	mogli::lib::LibMgrConfig config;
+	mogli::lib::LibraryManager libmgr(config, database);
 	mogli::rest::RESTConfig conf = {
-		.host = "localhost",
-		.port = 8000,
-		.useIPv4 = true,
+			.host = "localhost",
+			.port = 8000,
+			.useIPv4 = true,
 	};
-	mogli::rest::RESTEndpoint endpoint(conf);
+	mogli::rest::RESTEndpoint endpoint(libmgr, conf);
 	::endpoint = &endpoint;
 	logger->info("Initializing endpoint");
 	endpoint.init();

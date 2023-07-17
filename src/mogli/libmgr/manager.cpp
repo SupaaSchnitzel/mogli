@@ -1,29 +1,51 @@
 #include <mogli/libmgr/manager.hpp>
 
-using namespace mogli::lib;
-using libConfig = mogli::lib::libConfig;
+#include <exception>
+#include <map>
 
-LibraryManager::LibraryManager(libConfig config, IGameDatabase& database)
+using namespace mogli::lib;
+
+static std::map<GameID, Game> gamesdata{
+		{"0001",
+		 Game{
+				 .id = "0001",
+				 .title = "The Witcher 3: Wild Hunt - Complete Edition",
+				 .description = "Hello World",
+				 .tags = {"Adventure", "Fantasy", "Role-playing"},
+		 }},
+		{"0002",
+		 Game{
+				 .id = "0002",
+				 .title = "The Elder Scrolls V: Skyrim Anniversary Edition",
+				 .description = "Hello World",
+				 .tags = {"Adventure", "Fantasy", "Role-playing"},
+		 }},
+};
+
+Games::Iterator::Iterator(T iterator) : value(iterator) {}
+Games::Iterator& Games::Iterator::operator++() {
+	value++;
+	return *this;
+}
+Games::Iterator Games::Iterator::operator++(int) {
+	auto retval = *this;
+	++(*this);
+	return retval;
+}
+bool Games::Iterator::operator==(Games::Iterator other) const noexcept { return value == other.value; }
+bool Games::Iterator::operator!=(Games::Iterator other) const noexcept { return value != other.value; }
+const Game& Games::Iterator::operator*() const noexcept { return value->second; }
+
+Games::Iterator Games::begin() { return Games::Iterator(gamesdata.begin()); }
+
+Games::Iterator Games::end() { return Games::Iterator(gamesdata.end()); }
+
+Game Games::operator[](GameID id) const noexcept { return gamesdata[id]; }
+
+LibraryManager::LibraryManager(LibMgrConfig config, IGameDatabase& database)
 		: logger(mogli::log::getLogger("Library")), config(config), database(database) {}
 
-std::string LibraryManager::getGameMetadata(GameID gameTitle) {
-	switch (config.gamedb) {
-	case steam:
-		return getGameMetadataSteam(gameTitle);
-	case gog:
-		return getGameMetadataGog(gameTitle);
-	case gogdb:
-		return getGameMetadataGogdb(gameTitle);
-	default:
-		return "Nothing Found";
-	}
-}
-
-std::string LibraryManager::getGameMetadataGog(GameID gameTitle) { return "TODO"; }
-
-std::string LibraryManager::getGameMetadataGogdb(GameID gameTitle) { return "TODO"; }
-
-std::string LibraryManager::getGameMetadataSteam(GameID gameTitle) { return "TODO"; }
+std::string LibraryManager::getGameMetadata(GameID gameTitle) { throw std::runtime_error("Not implemented"); }
 
 int LibraryManager::addGame(std::string gameInfo) { return -1; }
 

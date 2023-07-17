@@ -122,10 +122,17 @@ paths:
           description: Created
           headers:
             Location:
-              type: string
-              description: The url to the newly created resource.
+              schema:
+                type: string
+                description: The url to the newly created resource.
         "403":
           description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemJSON"
+        "409":
+          description: Conflict
           content:
             application/problem+json:
               schema:

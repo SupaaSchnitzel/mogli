@@ -4,6 +4,7 @@
 #include <oatpp/network/tcp/server/ConnectionProvider.hpp>
 #include <oatpp/web/server/HttpConnectionHandler.hpp>
 
+#include "../libmgr/manager.hpp"
 #include "../logging.hpp"
 #include "config.hpp"
 
@@ -25,6 +26,7 @@ namespace mogli::rest {
 		 * @brief The logger which should be used by RESTEndpoint instances.
 		 */
 		const mogli::log::LoggerPtr logger;
+		mogli::lib::LibraryManager& libmgr;
 		const RESTConfig config;
 
 		static unsigned InstanceCounter;
@@ -33,14 +35,17 @@ namespace mogli::rest {
 		/**
 		 * @brief Creates a new instance from the provided configurations.
 		 * 
-		 * @param config the config that should be used for anything related to the RESTEndpoint.
+		 * @param config the
+		 * config that should be used for anything related to the RESTEndpoint.
 		 */
-		explicit RESTEndpoint(RESTConfig config);
+		explicit RESTEndpoint(mogli::lib::LibraryManager& libmgr, RESTConfig config);
 		/**
-		 * @brief Initializes this endpoint. This method should only be called once per instance and, if successful,
+		 * @brief Initializes this endpoint. This method should only be called once per instance and, if
+		 * successful,
 		 * must be followed by a call to #deinit
 		 * 
 		 * @return true on success, else false. 
+
 		 */
 		bool init();
 		/**

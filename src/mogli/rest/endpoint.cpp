@@ -2,13 +2,15 @@
 
 #include <mogli/rest/controller/controller.hpp>
 
+using LibraryManager = mogli::lib::LibraryManager;
 using RESTEndpoint = mogli::rest::RESTEndpoint;
 using RESTConfig = mogli::rest::RESTConfig;
 using Controller = mogli::rest::Controller;
 
 unsigned RESTEndpoint::InstanceCounter = 0;
 
-RESTEndpoint::RESTEndpoint(RESTConfig config) : logger(mogli::log::getLogger("REST")), config(config) {}
+RESTEndpoint::RESTEndpoint(LibraryManager& libmgr, RESTConfig config)
+		: logger(mogli::log::getLogger("REST")), libmgr(libmgr), config(config) {}
 
 bool RESTEndpoint::init() {
 	// Create the global oatpp environment if this is the first endpoint to use it
@@ -16,17 +18,18 @@ bool RESTEndpoint::init() {
 		oatpp::base::Environment::init();
 	++RESTEndpoint::InstanceCounter;
 
-	OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::data::mapping::ObjectMapper>, apiObjectMapper)([]{
+	OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::data::mapping::ObjectMapper>, apiObjectMapper)
+	([] {
 		auto objectMapper = oatpp::parser::json::mapping::ObjectMapper::createShared();
 		objectMapper->getDeserializer()->getConfig()->allowUnknownFields = false;
 		return objectMapper;
 	}());
 
-	// 
+	//
 	logger->info("Initializing HTTP router");
 	router = HttpRouter::createShared();
 
-	auto controller = router->addController(Controller::createShared());
+	auto controller = router->addController(std::make_shared<Controller>(libmgr));
 
 	logger->info("Initializing connection handler");
 	auto connectionHandler = HttpConnectionHandler::createShared(router);

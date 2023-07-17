@@ -4,12 +4,36 @@
 #include <iterator>
 #include <string>
 
+#include <map>
+
 #include "../logging.hpp"
 #include "config.hpp"
 #include "database.hpp"
+#include "game.hpp"
+
 namespace mogli::lib {
-	using GameID = std::string;
-	using gameDatabases = mogli::lib::gameDatabases;
+	struct Games {
+		class Iterator final {
+		private:
+			using reference = Game&;
+			using T = std::map<GameID, Game>::const_iterator;
+			T value;
+
+		public:
+			explicit Iterator(T iterator);
+			Iterator& operator++();
+			Iterator operator++(int);
+			bool operator==(Iterator other) const noexcept;
+			bool operator!=(Iterator other) const noexcept;
+			const Game& operator*() const noexcept;
+		};
+
+		Game operator[](GameID id) const noexcept;
+
+		Iterator begin();
+		Iterator end();
+	};
+
 	/**
 	 * @brief The library manager is responsible for synching the database and filesystem and provides and interface for
 	 * enumerating, adding and modifying the game library.
@@ -33,7 +57,7 @@ namespace mogli::lib {
 		/**
 		 * @brief The config of the library manager.
 		 */
-		libConfig config;
+		LibMgrConfig config;
 
 		/**
 		 * @brief Queries the gamedb specified in the config and returns the metadata for the given gameTitle.
@@ -42,30 +66,6 @@ namespace mogli::lib {
 		 * @return Returns a string formatted as json of the game Metadata
 		 */
 		std::string getGameMetadata(GameID gameTitle);
-
-		/**
-		 * @brief Queries the gogdb gamedb and returns the metadata for the given gameTitle.
-		 *
-		 * @param gameTitle Title of the game
-		 * @return Returns a string formatted as json of the game Metadata
-		 */
-		std::string getGameMetadataGogdb(GameID gameTitle);
-
-		/**
-		 * @brief Queries the Steam gamedb and returns the metadata for the given gameTitle.
-		 *
-		 * @param gameTitle Title of the game
-		 * @return Returns a string formatted as json of the game Metadata
-		 */
-		std::string getGameMetadataSteam(GameID gameTitle);
-
-		/**
-		 * @brief Queries the gog gamedb and returns the metadata for the given gameTitle.
-		 *
-		 * @param gameTitle Title of the game
-		 * @return Returns a string formatted as json of the game Metadata
-		 */
-		std::string getGameMetadataGog(GameID gameTitle);
 
 		/**
 		 * @brief Adds a game into the mogli gamedb.
@@ -93,6 +93,8 @@ namespace mogli::lib {
 		LibraryManager& operator=(LibraryManager& other) = delete;
 
 	public:
+		Games games;
+
 		/**
 		 * @brief Creates a new library manager that uses the given root directory as its home. That is scanning
 		 * the filesystem for changes. This is performed using the root directory as starting point.
@@ -100,7 +102,7 @@ namespace mogli::lib {
 		 * @param config the Configuration that should be used for anything regarding the library manager.
 		 * @param database the database implementation to store games into.
 		 */
-		LibraryManager(libConfig config, IGameDatabase& database);
+		LibraryManager(LibMgrConfig config, IGameDatabase& database);
 
 		/**
 		 * @brief This scans the whole filesystem starting from the root folder. Checks all found games for metadata and

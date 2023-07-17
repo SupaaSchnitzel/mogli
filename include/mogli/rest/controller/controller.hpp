@@ -5,6 +5,8 @@
 #include <oatpp/parser/json/mapping/ObjectMapper.hpp>
 #include <oatpp/web/server/api/ApiController.hpp>
 
+#include "../../libmgr/manager.hpp"
+
 #include OATPP_CODEGEN_BEGIN(ApiController)
 
 namespace mogli::rest {
@@ -18,13 +20,19 @@ namespace mogli::rest {
 		using Response = oatpp::web::protocol::http::outgoing::Response;
 
 	private:
+		mogli::lib::LibraryManager& libmgr;
+
 	public:
 		/**
 		 * @brief TODO: add documentation
 		 * 
-		 * @param objectMapper 
+		 * @param objectMapper
+		 * @param libmgr
+
 		 */
-		explicit Controller(const std::shared_ptr<ObjectMapper>& objectMapper) : ApiController(objectMapper) {}
+		explicit Controller(
+				mogli::lib::LibraryManager& libmgr, OATPP_COMPONENT(std::shared_ptr<ObjectMapper>, objectMapper)
+		);
 
 		/**
 		 * @brief TODO: add documentation
@@ -64,16 +72,6 @@ namespace mogli::rest {
 				"GET", "/users/{userid}/games/{gameid}", getGameFromUser, PATH(oatpp::String, userid),
 				PATH(oatpp::String, gameid)
 		);
-
-		/**
-		 * @brief TODO: add documentation
-		 * 
-		 * @return std::shared_ptr<Controller> 
-
-		 */
-		static std::shared_ptr<Controller> createShared(OATPP_COMPONENT(std::shared_ptr<ObjectMapper>, objectMapper)) {
-			return std::make_shared<Controller>(objectMapper);
-		}
 	};
 } // namespace mogli::rest
 

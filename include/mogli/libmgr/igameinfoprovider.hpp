@@ -9,12 +9,12 @@
 namespace mogli::lib {
 	using GameID = std::string;
 	/**
-     * @brief The GameInfoProvider interfaces provides the general functions implemented by each
+	 * @brief The GameInfoProvider interfaces provides the general functions implemented by each
 	 *
 	 * GameInfoProvider.
-    */
+	 */
 	class IGameInfoProvider {
-    private:
+	private:
 		/**
 		 * @brief The logger the library manager should write to.
 		 */
@@ -22,7 +22,8 @@ namespace mogli::lib {
 		/**
 		 * @brief The config of the library manager.
 		 */
-		libConfig config;
+		LibMgrConfig config;
+
 	public:
 		virtual void init() = delete;
 		virtual void deinit() = delete;
@@ -46,6 +47,5 @@ namespace mogli::lib {
 
 		 */
 		virtual std::optional<std::string> getGameByID(GameID id);
-        
 	};
 } // namespace mogli::lib
