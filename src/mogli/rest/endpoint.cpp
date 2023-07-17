@@ -2,6 +2,8 @@
 
 #include <mogli/rest/controller/controller.hpp>
 
+#include <oatpp/web/server/interceptor/AllowCorsGlobal.hpp>
+
 using LibraryManager = mogli::lib::LibraryManager;
 using RESTEndpoint = mogli::rest::RESTEndpoint;
 using RESTConfig = mogli::rest::RESTConfig;
@@ -33,6 +35,8 @@ bool RESTEndpoint::init() {
 
 	logger->info("Initializing connection handler");
 	auto connectionHandler = HttpConnectionHandler::createShared(router);
+	connectionHandler->addRequestInterceptor(std::make_shared<oatpp::web::server::interceptor::AllowOptionsGlobal>());
+    connectionHandler->addResponseInterceptor(std::make_shared<oatpp::web::server::interceptor::AllowCorsGlobal>());
 	logger->info("Initializing TCP connection provider");
 	auto version = config.useIPv4 ? oatpp::network::Address::IP_4 : oatpp::network::Address::IP_6;
 	connectionProvider = ConnectionProvider::createShared({config.host, config.port, version});

@@ -39,17 +39,13 @@ Controller::Controller(LibraryManager& libmgr, std::shared_ptr<ObjectMapper>& ob
 std::shared_ptr<Controller::Response> Controller::getGames() {
 	auto vector = oatpp::Vector<oatpp::Object<dto::GameInfo>>::createShared();
 	std::transform(libmgr.games.begin(), libmgr.games.end(), std::back_inserter(*vector.get()), toDTO);
-	auto response = createDtoResponse(Status::CODE_200, vector);
-	response->putHeaderIfNotExists("Access-Control-Allow-Origin", "*");
-	return response;
+	return createDtoResponse(Status::CODE_200, vector);
 }
 
 std::shared_ptr<Controller::Response> Controller::getGame(const oatpp::String& gameid) {
 	auto game = libmgr.games[gameid];
 	auto dto = toDTO(game);
-	auto response = createDtoResponse(Status::CODE_200, dto);
-	response->putHeaderIfNotExists("Access-Control-Allow-Origin", "*");
-	return response;
+	return createDtoResponse(Status::CODE_200, dto);
 }
 
 std::shared_ptr<Controller::Response> Controller::deleteGame(const oatpp::String& gameid) {
