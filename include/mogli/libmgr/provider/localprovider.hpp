@@ -8,7 +8,6 @@
 
 namespace mogli::lib {
 	using GameID = std::string;
-	using gameDatabases = mogli::lib::gameDatabases;
 	/**
 	 * @brief The local provider is used to read the locally provided game information and serve it through the
 

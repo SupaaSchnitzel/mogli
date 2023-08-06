@@ -15,6 +15,7 @@ RESTEndpoint::RESTEndpoint(LibraryManager& libmgr, RESTConfig config)
 		: logger(mogli::log::getLogger("REST")), libmgr(libmgr), config(config) {}
 
 bool RESTEndpoint::init() {
+	logger->info("Initializing REST Endpoint...");
 	// Create the global oatpp environment if this is the first endpoint to use it
 	if (RESTEndpoint::InstanceCounter == 0)
 		oatpp::base::Environment::init();

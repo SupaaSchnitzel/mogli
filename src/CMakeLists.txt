@@ -3,6 +3,8 @@ include(FetchContent)
 # Library
 add_library(mogli STATIC
 	mogli/libmgr/manager.cpp
+	mogli/libmgr/filesystem/gameentry.cpp
+	mogli/libmgr/filesystem/scanner.cpp
 	mogli/libmgr/provider/gogprovider.cpp
 	mogli/libmgr/provider/gogdbprovider.cpp
 	mogli/libmgr/provider/steamprovider.cpp
@@ -43,24 +45,23 @@ set(OATPP_MODULES_LOCATION "CUSTOM")
 set(OATPP_DIR_SRC ${oatpp_lib_SOURCE_DIR}/src/)
 set(OATPP_DIR_LIB ${oatpp_lib_BINARY_DIR}/src/)
 
-if (false)
-	# Oatpp-postgres for REST API
-	FetchContent_Declare(
-		oatpp_postgres
-		GIT_REPOSITORY https://github.com/oatpp/oatpp-postgresql.git
-		GIT_TAG 1.3.0
-	)
-	FetchContent_MakeAvailable(oatpp_postgres)
-	FetchContent_GetProperties(oatpp_postgres)
-	target_include_directories(mogli PRIVATE ${oatpp_postgres_SOURCE_DIR}/src/)
-	target_include_directories(mogliexe PRIVATE ${oatpp_postgres_SOURCE_DIR}/src/)
-	target_link_libraries(mogli PRIVATE oatpp-postgresql)
-endif()
-
 # spdlog for logging
 FetchContent_Declare(spdlog GIT_REPOSITORY https://github.com/gabime/spdlog.git GIT_TAG v1.11.0)
 FetchContent_MakeAvailable(spdlog)
 target_link_libraries(mogli PRIVATE spdlog::spdlog)
-# target_include_directories(mogli PUBLIC ${spdlog_SOURCE_DIR}/include)
 target_link_libraries(mogliexe spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
-# target_include_directories(mogliexe PUBLIC ${spdlog_SOURCE_DIR}/include)
+
+# CLI11 for configurations via .ini files and CLI
+FetchContent_Declare(cli11 GIT_REPOSITORY https://github.com/CLIUtils/CLI11 GIT_TAG v2.3.2)
+FetchContent_MakeAvailable(cli11)
+target_link_libraries(mogliexe CLI11::CLI11)
+
+# rapidyaml for adding meta information to game folders
+FetchContent_Declare(ryml
+    GIT_REPOSITORY https://github.com/biojppm/rapidyaml.git
+    GIT_TAG v0.5.0
+    GIT_SHALLOW FALSE  # ensure submodules are checked out
+)
+FetchContent_MakeAvailable(ryml)
+target_link_libraries(mogli PRIVATE ryml::ryml)
+target_link_libraries(mogliexe ryml::ryml)

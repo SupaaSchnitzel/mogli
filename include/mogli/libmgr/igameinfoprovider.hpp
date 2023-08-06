@@ -14,16 +14,6 @@ namespace mogli::lib {
 	 * GameInfoProvider.
 	 */
 	class IGameInfoProvider {
-	private:
-		/**
-		 * @brief The logger the library manager should write to.
-		 */
-		mogli::log::LoggerPtr logger;
-		/**
-		 * @brief The config of the library manager.
-		 */
-		LibMgrConfig config;
-
 	public:
 		virtual void init() = delete;
 		virtual void deinit() = delete;

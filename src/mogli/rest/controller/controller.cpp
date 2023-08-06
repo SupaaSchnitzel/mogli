@@ -17,6 +17,7 @@ static dto::GameInfo::Wrapper toDTO(const mogli::lib::Game& game) noexcept {
 	for (auto&& tag : game.tags)
 		dto->tags->push_back(tag);
 	dto->media = dto::GameMedia::createShared();
+	/** \todo remove harcoded links **/
 	dto->media->logo =
 			"https://images.gog-statics.com/71d71c40052877a42c096b8230c71856a560d42132208cfa8e719243b5c6626b.jpg";
 	dto->media->banner =

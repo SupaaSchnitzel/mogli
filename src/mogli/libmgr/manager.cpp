@@ -43,11 +43,13 @@ Games::Iterator Games::end() { return Games::Iterator(gamesdata.end()); }
 Game Games::operator[](GameID id) const noexcept { return gamesdata[id]; }
 
 LibraryManager::LibraryManager(LibMgrConfig config, IGameDatabase& database)
-		: logger(mogli::log::getLogger("Library")), config(config), database(database) {}
+		: logger(mogli::log::getLogger("Library")), config(config), database(database) {
+	logger->info("Initializing Library Manager");
+}
 
 std::string LibraryManager::getGameMetadata(GameID gameTitle) { throw std::runtime_error("Not implemented"); }
 
-int LibraryManager::addGame(std::string gameInfo) { return -1; }
+int LibraryManager::addGame(std::string gameInfo) { throw std::runtime_error("Not implemented"); }
 
 int LibraryManager::scanThread() {
 	if (!std::filesystem::is_directory(config.root))
@@ -78,8 +80,8 @@ int LibraryManager::rescanThread() {
 	return -1;
 }
 
-int LibraryManager::scan() { return -1; }
+int LibraryManager::scan() { throw std::runtime_error("Not implemented"); }
 
-int LibraryManager::rescan() { return -1; }
+int LibraryManager::rescan() { throw std::runtime_error("Not implemented"); }
 
-int LibraryManager::setGameMetadata(std::string url, GameID game) { return -1; }
+int LibraryManager::setGameMetadata(std::string url, GameID game) { throw std::runtime_error("Not implemented"); }

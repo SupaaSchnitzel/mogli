@@ -10,6 +10,7 @@
 #include "config.hpp"
 #include "database.hpp"
 #include "game.hpp"
+#include "filesystem/scanner.hpp"
 
 namespace mogli::lib {
 	struct Games {
@@ -53,7 +54,6 @@ namespace mogli::lib {
 		 */
 		IGameDatabase& database;
 
-		// TODO: Vlt. ne init damit man eventuell die gogdb datenbank herunterladen kann.
 		/**
 		 * @brief The config of the library manager.
 		 */
