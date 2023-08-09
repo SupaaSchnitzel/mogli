@@ -48,7 +48,7 @@ set(OATPP_DIR_LIB ${oatpp_lib_BINARY_DIR}/src/)
 # spdlog for logging
 FetchContent_Declare(spdlog GIT_REPOSITORY https://github.com/gabime/spdlog.git GIT_TAG v1.11.0)
 FetchContent_MakeAvailable(spdlog)
-target_link_libraries(mogli PRIVATE spdlog::spdlog)
+target_link_libraries(mogli PUBLIC spdlog::spdlog)
 target_link_libraries(mogliexe spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
 
 # CLI11 for configurations via .ini files and CLI
@@ -63,5 +63,5 @@ FetchContent_Declare(ryml
     GIT_SHALLOW FALSE  # ensure submodules are checked out
 )
 FetchContent_MakeAvailable(ryml)
-target_link_libraries(mogli PRIVATE ryml::ryml)
+target_link_libraries(mogli PUBLIC ryml::ryml)
 target_link_libraries(mogliexe ryml::ryml)

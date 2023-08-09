@@ -14,9 +14,9 @@ add_executable(tests
 	mogli/libmgr/filesystem/gameentry_test.cpp
 )
 
-file(COPY testfiles ${CMAKE_CURRENT_BINARY_DIR})
+# file(COPY testfiles ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain mogli)
 target_compile_features(tests PRIVATE cxx_std_23)
 
-add_test(NAME mogli_test COMMAND tests)
+add_test(NAME mogli_test COMMAND tests WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/testfiles)

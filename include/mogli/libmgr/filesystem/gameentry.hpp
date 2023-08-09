@@ -11,6 +11,8 @@
 #include <variant>
 #include <vector>
 
+#include "../../logging.hpp"
+
 namespace mogli::lib {
 
 	/**
@@ -21,8 +23,27 @@ namespace mogli::lib {
 	class GameEntry final {
 		using path_or_url = std::variant<std::filesystem::path, std::string>;
 	private:
+		mogli::log::LoggerPtr logger; /**< The logger the library manager should write to. **/
 		std::filesystem::directory_entry entry; /**< The directory that holds this game's informations. **/
 		std::optional<ryml::Tree> yaml; /**< The parsed yaml file contents. **/
+
+		/**
+		 * @brief Retrieves the yaml tree node associated with the provided path. If the path does not exist, empty is
+		 * returned.
+		 * 
+		 * @param path 
+		 * @return std::optional<ryml::NodeRef> 
+		 */
+		std::optional<ryml::ConstNodeRef> getInfoEntryNode(std::vector<std::string> path) const noexcept;
+		/**
+		 * @brief Retrieves a key from the info.yml file describing metadata of this game entry.
+		 * 
+		 * @tparam T 
+		 * @param path 
+		 * @return T 
+		 */
+		template<typename T>
+		std::optional<T> getInfoEntry(std::vector<std::string> path) const noexcept;
 	public:
 		/**
 		 * @brief Construct a new GameEntry object that is associated with the provided directory.
