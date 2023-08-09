@@ -21,6 +21,7 @@ namespace mogli::lib {
 	 * of the folder structure can be found \ref md_media_filesystem "here".
 	 */
 	class GameEntry final {
+	public:
 		using path_or_url = std::variant<std::filesystem::path, std::string>;
 	private:
 		mogli::log::LoggerPtr logger; /**< The logger the library manager should write to. **/
