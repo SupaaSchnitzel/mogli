@@ -1,0 +1,5 @@
+developer:
+  - Developer A Inc.
+hints:
+  hint2: value from yaml
+  hint from yaml: 42

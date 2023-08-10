@@ -45,6 +45,12 @@ namespace mogli::lib {
 		 */
 		template<typename T>
 		std::optional<T> getInfoEntry(std::vector<std::string> path) const noexcept;
+
+		template <typename T>
+		std::optional<std::vector<T>> getInfoSeqEntry(std::vector<std::string> path) const noexcept;
+
+		template<typename T>
+		std::optional<T> getNodeValue(const ryml::ConstNodeRef& node) const noexcept;
 	public:
 		/**
 		 * @brief Construct a new GameEntry object that is associated with the provided directory.
@@ -61,6 +67,8 @@ namespace mogli::lib {
 		 * `myfilename`.
 		 * 
 		 * @return The name of the game.
+		 * 
+		 * @note getName() is the only exception where the info.yaml takes precedence over the filename.
 		 */
 		std::string getName() const noexcept;
 
