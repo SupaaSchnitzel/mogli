@@ -1,5 +1,9 @@
 #pragma once
 
+#include "game.hpp"
+
+#include <optional>
+
 namespace mogli::lib {
 	/**
 	 * @brief The generic game database interface.

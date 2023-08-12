@@ -61,8 +61,7 @@ std::optional<ryml::ConstNodeRef> GameEntry::getInfoEntryNode(std::vector<std::s
 	return std::nullopt;
 }
 
-template<>
-std::optional<std::string> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
+template <> std::optional<std::string> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
 	if (!node.has_val()) {
 		std::vector<std::string> path;
 		for (auto n = node; n.has_parent(); n = n.parent())
@@ -73,8 +72,7 @@ std::optional<std::string> GameEntry::getNodeValue(const ryml::ConstNodeRef& nod
 	return std::make_optional(std::string(node.val().begin(), node.val().end()));
 }
 
-template<>
-std::optional<int> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
+template <> std::optional<int> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
 	if (!node.has_val()) {
 		std::vector<std::string> path;
 		for (auto n = node; n.has_parent(); n = n.parent())
@@ -96,8 +94,7 @@ std::optional<int> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const
 	return std::make_optional(i);
 }
 
-template<>
-std::optional<float> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
+template <> std::optional<float> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
 	if (!node.has_val()) {
 		std::vector<std::string> path;
 		for (auto n = node; n.has_parent(); n = n.parent())
@@ -119,8 +116,7 @@ std::optional<float> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) con
 	return std::make_optional(f);
 }
 
-template <typename T>
-std::optional<T> GameEntry::getInfoEntry(std::vector<std::string> path) const noexcept {
+template <typename T> std::optional<T> GameEntry::getInfoEntry(std::vector<std::string> path) const noexcept {
 	auto node = getInfoEntryNode(path);
 	return node.and_then([this](auto n) { return getNodeValue<T>(n); });
 }
@@ -146,7 +142,8 @@ std::optional<std::vector<T>> GameEntry::getInfoSeqEntry(std::vector<std::string
 }
 
 std::string GameEntry::getName() const noexcept {
-	/** \todo add yaml support **/
+	if (auto title = getInfoEntry<std::string>({"title"}); title.has_value())
+		return title.value();
 	const std::string name = entry.path().stem();
 	auto end = name.end();
 	// Remove anything trailing that could be a date or hint.
@@ -155,13 +152,15 @@ std::string GameEntry::getName() const noexcept {
 			end = name.begin() + match.prefix().length();
 	// Remove trailing whitespaces
 	// I don't like that this is necessary (https://stackoverflow.com/a/21578623)
-	const auto isspace = [](char c){ return std::isspace(static_cast<unsigned char>(c)); };
+	const auto isspace = [](char c) { return std::isspace(static_cast<unsigned char>(c)); };
 	end = std::find_if_not(std::make_reverse_iterator(end), name.rend(), isspace).base();
 	return std::string(name.begin(), end);
 }
 
 /** \todo stoi and the like my not be ideal since they throw exceptions. Instead a function of the signature
  *  bool
+
+ * *
  * myfunc(std::string str, int& out) would be best. **/
 
 std::optional<int> GameEntry::getReleaseYear() const noexcept {
@@ -175,7 +174,6 @@ std::optional<int> GameEntry::getReleaseYear() const noexcept {
 }
 
 std::optional<std::string> GameEntry::getHint(std::string key) const noexcept {
-	/** \todo add yaml support **/
 	std::regex regex(std::format("\\[{}-(.*?)\\]", key));
 	std::smatch match;
 	std::string name = entry.path().stem();
@@ -184,8 +182,7 @@ std::optional<std::string> GameEntry::getHint(std::string key) const noexcept {
 }
 
 std::vector<std::string> GameEntry::getTags() const noexcept {
-	/** \todo implement **/
-	return {};
+	return getInfoSeqEntry<std::string>({"tags"}).value_or(std::vector<std::string>());
 }
 
 std::vector<std::string> GameEntry::getDeveloper() const noexcept {
@@ -193,10 +190,7 @@ std::vector<std::string> GameEntry::getDeveloper() const noexcept {
 }
 
 std::vector<std::string> GameEntry::getPublisher() const noexcept {
-	if (yaml.has_value()) {
-		/** \todo implement **/
-	}
-	return {};
+	return getInfoSeqEntry<std::string>({"publisher"}).value_or(std::vector<std::string>());
 }
 
 std::optional<float> GameEntry::getRating() const noexcept { return getInfoEntry<float>({"rating"}); }
