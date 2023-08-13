@@ -158,7 +158,7 @@ namespace mogli::lib {
 		 * 
 		 * @return the paths or URLs of all the screenshots that were found.
 		 */
-		std::vector<path_or_url> getScreenshots() const noexcept;
+		std::vector<std::filesystem::path> getScreenshots() const noexcept;
 
 		/**
 		 * @brief Returns the paths or URLs of all the trailers that were found for the game.

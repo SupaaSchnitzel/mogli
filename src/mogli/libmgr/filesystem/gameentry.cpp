@@ -14,7 +14,7 @@ using dirent = std::filesystem::directory_entry;
 using std::filesystem::directory_iterator;
 using std::filesystem::path;
 using std::ranges::find_if;
-using std::ranges::views::transform;
+using std::views::transform;
 
 static std::regex dateRegex("\\((\\d{4})\\)");
 static std::regex anyHintRegex("\\[(.*?)-(.*?)\\]");
@@ -39,6 +39,11 @@ static std::optional<dirent> getMemberFile(dirent dir, std::string name) noexcep
 		if (entry.is_regular_file() && entry.path().stem() == name)
 			return std::make_optional(entry);
 	return std::nullopt;
+}
+
+inline static bool isPicture(std::filesystem::path path) {
+	static const char* picExtensions[] = {".png", ".jpg", ".jpeg", ".webp", ".tiff"};
+	return std::find(std::begin(picExtensions), std::end(picExtensions), path.extension()) != std::end(picExtensions);
 }
 
 GameEntry::GameEntry(dirent entry)
@@ -158,11 +163,7 @@ std::string GameEntry::getName() const noexcept {
 }
 
 /** \todo stoi and the like my not be ideal since they throw exceptions. Instead a function of the signature
- *  bool
-
- * *
- * myfunc(std::string str, int& out) would be best. **/
-
+ * bool myfunc(std::string str, int& out) would be best. **/
 std::optional<int> GameEntry::getReleaseYear() const noexcept {
 	std::string name = entry.path().stem();
 	std::smatch match;
@@ -215,8 +216,16 @@ std::optional<dirent> GameEntry::getBoxart() const noexcept {
 	});
 }
 
-std::vector<GameEntry::path_or_url> GameEntry::getScreenshots() const noexcept {
-	/** \todo implement **/
+std::vector<std::filesystem::path> GameEntry::getScreenshots() const noexcept {
+	auto screenshotDir = entry.path() / "screenshots";
+	if (std::filesystem::is_directory(screenshotDir)) {
+		auto range = std::filesystem::recursive_directory_iterator(screenshotDir) |
+					 std::views::transform(std::mem_fn(&dirent::path)) | std::views::filter(isPicture);
+		std::vector<std::filesystem::path> screenshots;
+		for (auto&& path : range)
+			screenshots.emplace_back(path);
+		return screenshots;
+	}
 	return {};
 }
 

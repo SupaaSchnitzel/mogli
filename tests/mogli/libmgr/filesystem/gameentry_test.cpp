@@ -57,8 +57,9 @@ TEST_CASE("No info.yml", "[gameentry]") {
 		CHECK(entry.getInstallerFiles(mogli::lib::Platform::Mac).empty());
 		CHECK(entry.getInstallerFiles(mogli::lib::Platform::Windows).empty());
 		CHECK_FALSE(entry.getRating().has_value());
-		std::vector<GameEntry::path_or_url> expected = {path("screenshot1.png"), path("screenshot2.jpg")};
-		CHECK_THAT(entry.getScreenshots() | transform(to_relative_pou), UnorderedRangeEquals(expected));
+		std::vector<std::filesystem::path> expected = {
+				path("screenshots/screenshot1.png"), path("screenshots/screenshot2.jpg")};
+		CHECK_THAT(entry.getScreenshots() | transform(to_relative), UnorderedRangeEquals(expected));
 		CHECK(entry.getSupportedPlatforms().empty());
 		CHECK(entry.getTags().empty());
 		CHECK(entry.getTrailers().empty());
