@@ -14,4 +14,4 @@ RUN apt-get -y install g++-13 cmake git
 RUN apt-get -y install cppcheck doxygen graphviz
 
 # Dependencies
-RUN apt-get -y install libiddawc-dev
+RUN apt-get -y install libiddawc-dev libpq-dev

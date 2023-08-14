@@ -3,6 +3,7 @@ include(FetchContent)
 # Library
 add_library(mogli STATIC
 	mogli/libmgr/manager.cpp
+	mogli/libmgr/database/postgresql.cpp
 	mogli/libmgr/filesystem/gameentry.cpp
 	mogli/libmgr/filesystem/scanner.cpp
 	mogli/libmgr/provider/gogprovider.cpp
@@ -65,3 +66,18 @@ FetchContent_Declare(ryml
 FetchContent_MakeAvailable(ryml)
 target_link_libraries(mogli PUBLIC ryml::ryml)
 target_link_libraries(mogliexe ryml::ryml)
+
+# SOCI for abstracting database backends
+set(SOCI_TESTS OFF)
+set(SOCI_EMPTY OFF)
+set(SOCI_CXX11 ON)
+set(WITH_DB2 OFF)
+set(WITH_FIREBIRD OFF)
+set(WITH_MYSQL OFF)
+set(WITH_ORACLE OFF)
+set(SOCI_POSTGRESQL ON) # requires libpq-dev to be installed
+set(WITH_SQLITE3 OFF)
+FetchContent_Declare(soci GIT_REPOSITORY https://github.com/SOCI/soci.git GIT_TAG v4.0.3)
+FetchContent_MakeAvailable(soci)
+target_link_libraries(mogli PRIVATE soci_core soci_postgresql)
+target_include_directories(mogli PRIVATE ${soci_BINARY_DIR}/include ${POSTGRESQL_INCLUDE_DIR})

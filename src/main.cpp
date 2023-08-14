@@ -21,6 +21,7 @@ void sigintHandler(int signal) {
 struct RunAppArgs {
 	std::filesystem::path mediaRoot;
 	mogli::rest::RESTConfig restConf;
+	mogli::lib::DBConfig dbConf;
 };
 
 struct ScanAppArgs {
@@ -30,10 +31,10 @@ struct ScanAppArgs {
 static void runRunCommand(const RunAppArgs args) {
 	auto logger = mogli::log::getLogger("Mogli");
 	logger->info("Launching mogli v.{}", mogli::version);
-	mogli::lib::PostgreGameDatabase database;
+	auto database = mogli::lib::createPostgreSQLConnector();
+	database->setup(args.dbConf);
 	mogli::lib::LibMgrConfig config{.root = "/media"};
-	mogli::lib::LibraryManager libmgr(config, database);
-	logger->info("{} {} {}", args.restConf.host, args.restConf.port, args.restConf.useIPv4);
+	mogli::lib::LibraryManager libmgr(config, *database);
 	mogli::rest::RESTEndpoint endpoint(libmgr, args.restConf);
 	::endpoint = &endpoint;
 	endpoint.init();
@@ -47,6 +48,7 @@ static void runRunCommand(const RunAppArgs args) {
 
 	logger->info("Exiting");
 	endpoint.deinit();
+	database->teardown();
 	::endpoint = nullptr;
 }
 
@@ -81,6 +83,22 @@ int main(int argc, char* argv[]) {
 		->default_val(true)
 		->configurable(true)
 		->envname("MOGLI_REST_IPV4");
+	runApp.add_option("--dbhost", runArgs.dbConf.host, "The database host to connect to")
+		->configurable(true)
+		->envname("MOGLI_DB_HOST");
+	runApp.add_option("--dbport", runArgs.dbConf.port, "The database port to connect to")
+		->default_val(5432)
+		->configurable(true)
+		->envname("MOGLI_DB_PORT");
+	runApp.add_option("--dbname", runArgs.dbConf.dbname, "The name of the database")
+		->configurable(true)
+		->envname("MOGLI_DB_NAME");
+	runApp.add_option("--dbuser", runArgs.dbConf.username, "The database user account to log into")
+		->configurable(true)
+		->envname("MOGLI_DB_USER");
+	runApp.add_option("--dbpassword", runArgs.dbConf.password, "The database user password to log in with")
+		->configurable(true)
+		->envname("MOGLI_DB_PASSWORD");
 	runApp.callback({[&runArgs]() { runRunCommand(runArgs); }});
 
 	// Scan Command
