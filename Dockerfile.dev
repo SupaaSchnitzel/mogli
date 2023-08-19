@@ -11,7 +11,7 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test && apt-get update
 RUN apt-get -y install g++-13 cmake git
 
 # Needed for the dev environment
-RUN apt-get -y install cppcheck doxygen graphviz
+RUN apt-get -y install cppcheck doxygen graphviz gdb
 
 # Dependencies
 RUN apt-get -y install libiddawc-dev libpq-dev

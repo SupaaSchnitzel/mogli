@@ -32,24 +32,30 @@ static void runRunCommand(const RunAppArgs args) {
 	auto logger = mogli::log::getLogger("Mogli");
 	logger->info("Launching mogli v.{}", mogli::version);
 	auto database = mogli::lib::createPostgreSQLConnector();
-	database->setup(args.dbConf);
-	mogli::lib::LibMgrConfig config{.root = "/media"};
-	mogli::lib::LibraryManager libmgr(config, *database);
-	mogli::rest::RESTEndpoint endpoint(libmgr, args.restConf);
-	::endpoint = &endpoint;
-	endpoint.init();
+	auto dbError = database->setup(args.dbConf);
+	if (dbError == mogli::lib::IGameDatabase::Success) {
+		mogli::lib::LibMgrConfig config{.root = "/media"};
+		mogli::lib::LibraryManager libmgr(config, *database);
+		mogli::rest::RESTEndpoint endpoint(libmgr, args.restConf);
+		::endpoint = &endpoint;
+		
+		if (endpoint.init()) {
+			logger->info("Instanting sigint handler");
+			std::signal(SIGINT, sigintHandler);
 
-	logger->info("Instanting sigint handler");
-	std::signal(SIGINT, sigintHandler);
+			logger->info("Setup done");
 
-	logger->info("Setup done");
+			endpoint.run();
 
-	endpoint.run();
-
-	logger->info("Exiting");
-	endpoint.deinit();
-	database->teardown();
+			logger->info("Exiting");
+			endpoint.deinit();
+		}
+		database->teardown();
+	} else {
+		logger->critical("Failed to setup database: {}", database->getErrorMessage(dbError));
+	}
 	::endpoint = nullptr;
+	logger->info("Exited");
 }
 
 static void runScanCommand(const ScanAppArgs args) {
