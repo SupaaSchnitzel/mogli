@@ -26,7 +26,7 @@ namespace mogli::lib {
 			Iterator operator++(int);
 			bool operator==(Iterator other) const noexcept;
 			bool operator!=(Iterator other) const noexcept;
-			const Game& operator*() const noexcept;
+			Game operator*() const noexcept;
 		};
 
 		Game operator[](GameID id) const noexcept;

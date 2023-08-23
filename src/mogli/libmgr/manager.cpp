@@ -34,7 +34,7 @@ Games::Iterator Games::Iterator::operator++(int) {
 }
 bool Games::Iterator::operator==(Games::Iterator other) const noexcept { return value == other.value; }
 bool Games::Iterator::operator!=(Games::Iterator other) const noexcept { return value != other.value; }
-const Game& Games::Iterator::operator*() const noexcept { return value->second; }
+Game Games::Iterator::operator*() const noexcept { return value->second; }
 
 Games::Iterator Games::begin() { return Games::Iterator(gamesdata.begin()); }
 

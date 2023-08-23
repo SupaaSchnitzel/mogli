@@ -16,3 +16,22 @@ namespace mogli::log {
 	 */
 	LoggerPtr getLogger(std::string name);
 } // namespace mogli::log
+
+///////////////////////////
+// Custom loggable types //
+///////////////////////////
+#include <spdlog/fmt/bundled/format.h>
+
+template<typename T>
+struct fmt::formatter<std::optional<T>> {
+    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
+        return ctx.end();
+    }
+
+    template <typename FormatContext>
+    auto format(const std::optional<T>& input, FormatContext& ctx) -> decltype(ctx.out()) {
+		if (input.has_value())
+			return fmt::format_to(ctx.out(), "{}", input.value());
+		return fmt::format_to(ctx.out(), "<EMPTY>");
+    }
+};

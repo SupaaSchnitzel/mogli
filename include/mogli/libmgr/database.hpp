@@ -1,10 +1,13 @@
 #pragma once
 
 #include "game.hpp"
+#include "filesystem/gameentry.hpp"
+#include "../utils/iterable.hpp"
 
 #include <inttypes.h>
 #include <optional>
 #include <memory>
+#include <variant>
 
 namespace mogli::lib {
 
@@ -59,6 +62,10 @@ namespace mogli::lib {
 		 * @return The description of the provided error code.
 		 */
 		virtual const char* getErrorMessage(ErrorCode error) noexcept = 0;
+
+		virtual ErrorCode addGame(mogli::lib::GameEntry entry) noexcept = 0;
+
+		virtual std::variant<std::shared_ptr<mogli::utils::Iterable<Game>>, ErrorCode> games() noexcept = 0;
 	};
 
 	std::unique_ptr<IGameDatabase> createPostgreSQLConnector();
