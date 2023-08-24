@@ -12,8 +12,20 @@
 using namespace mogli::lib;
 using std::views::transform;
 
-template<typename T>
-static std::optional<T> getOpt(const soci::row& row, std::string column) {
+struct Tmp {
+	mogli::utils::GenericIterator<Game> _begin;
+	mogli::utils::GenericIterator<Game> _end;
+
+	template <std::input_or_output_iterator IterB, std::input_or_output_iterator IterE>
+	Tmp(IterB begin, IterE end) noexcept : _begin(begin), _end(end) {}
+
+	Tmp(auto& container) noexcept : _begin(container.begin()), _end(container.end()) {}
+
+	const mogli::utils::GenericIterator<Game>& begin() const { return _begin; }
+	const mogli::utils::GenericIterator<Game>& end() const { return _end; }
+};
+
+template <typename T> static std::optional<T> getOpt(const soci::row& row, std::string column) {
 	if (row.get_indicator(column) == soci::indicator::i_ok)
 		return row.get<T>(column);
 	return std::nullopt;
@@ -24,9 +36,10 @@ static Game toGame(const soci::row& row) {
 	auto entry = GameEntry(std::filesystem::directory_entry(row.get<std::string>("path")));
 	game.id = std::to_string(row.get<int>("id"));
 	/** \fixme the name from the database should have precedence over the file name but not over the name within the
-	 * info.yaml*/
+
+	 * * info.yaml*/
 	game.title = getOpt<std::string>(row, "title").value_or(entry.getName());
-	game.description = getOpt<std::string>(row, "description")/*.value_or(entry.getDescription())*/;
+	game.description = getOpt<std::string>(row, "description") /*.value_or(entry.getDescription())*/;
 	return game;
 }
 
@@ -149,22 +162,12 @@ public:
 		return ErrorCodes::genericError;
 	}
 
-	std::variant<std::shared_ptr<mogli::utils::Iterable<Game>>, ErrorCode> games() noexcept override {
-		/**
-		 * We use shared_ptr's aliasing constructor here to make sure that the soci::rowset exists even after returning
-		 * from this function
-		*/
+	std::variant<mogli::utils::Iterable<Game>, ErrorCode> games() noexcept override {
 		try {
-			struct Holder {
-				soci::rowset<soci::row> rows;
-				mogli::utils::Iterable<Game> iterable;
-
-				Holder(soci::rowset<soci::row> rows) noexcept
-						: rows(rows), iterable(std::ranges::subrange(rows) | transform(toGame)) {}
-			};
-			auto holder =
-					std::make_shared<Holder>(session.prepare << R"(SELECT id, title, description, path FROM games)");
-			return std::shared_ptr<mogli::utils::Iterable<Game>>(holder, &holder->iterable);
+			soci::rowset<soci::row> rows = session.prepare << R"(SELECT id, title, description, path FROM games)";
+			auto view = std::views::all(std::move(rows)) | transform(toGame);
+			auto viewptr = std::make_shared<decltype(view)>(std::move(view));
+			return mogli::utils::Iterable<Game>(*viewptr, viewptr);
 		} catch (soci::soci_error& e) {
 			logger->critical("Failed to iterate games [{}]: {}", (int)e.get_error_category(), e.get_error_message());
 			return ErrorCodes::genericError;

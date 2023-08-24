@@ -65,7 +65,7 @@ namespace mogli::lib {
 
 		virtual ErrorCode addGame(mogli::lib::GameEntry entry) noexcept = 0;
 
-		virtual std::variant<std::shared_ptr<mogli::utils::Iterable<Game>>, ErrorCode> games() noexcept = 0;
+		virtual std::variant</*std::shared_ptr<*/mogli::utils::Iterable<Game>/*>*/, ErrorCode> games() noexcept = 0;
 	};
 
 	std::unique_ptr<IGameDatabase> createPostgreSQLConnector();

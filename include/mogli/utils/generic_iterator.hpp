@@ -1,60 +1,59 @@
 #pragma once
 
-#include <algorithm>
-#include <array>
-#include <iostream>
 #include <iterator>
 #include <memory>
-#include <vector>
 
 namespace mogli::utils {
 
-	// https://stackoverflow.com/a/35866966
-	template<typename value_type>
-	struct generic_iterator {
-		struct Concept {
-			virtual void next(int n) = 0;
-			virtual value_type deref() const = 0;
-			virtual bool equal(const void* other) const = 0;
-			virtual std::unique_ptr<Concept> clone() const = 0;
-			virtual const std::type_info& type() const = 0;
-			virtual const void* address() const = 0;
-			virtual ~Concept() = default;
-		};
+    template<typename T>
+    class GenericIterator {
+    private:
+        class AIter {
+        public:
+            virtual ~AIter() noexcept = default;
+            virtual T deref() const noexcept = 0;
+            virtual void advance() noexcept = 0;
+            virtual bool equals(const AIter& other) const noexcept = 0;
+            virtual const std::type_info& type() const = 0;
+            virtual std::unique_ptr<AIter> clone() const = 0;
+        };
 
-		template <std::input_or_output_iterator Iter>
-		struct ConcreteIter : Concept {
-			ConcreteIter(Iter iter) : _iter(iter) {}
+        template<std::input_or_output_iterator TIt>
+        class Iter final : public AIter {
+        private:
+            TIt iterator;
+            std::shared_ptr<void> userdata;
+        
+        public:
+            explicit Iter(TIt& iterator) noexcept : iterator(iterator), userdata(nullptr) {}
 
-			void next(int n) override { _iter = std::ranges::next(_iter, n); }
-			value_type deref() const override { return *_iter; }
-			bool equal(const void* rp) const override { return _iter == static_cast<const ConcreteIter*>(rp)->_iter; }
-			std::unique_ptr<Concept> clone() const override { return std::make_unique<ConcreteIter>(*this); }
-			const std::type_info& type() const override { return typeid(_iter); }
-			const void* address() const override { return this; }
+            template<typename K>
+            Iter(TIt& iterator, std::shared_ptr<K> userdata) : iterator(iterator), userdata(userdata) {}
 
-			Iter _iter;
-		};
+            T deref() const noexcept override { return *iterator; }
+            void advance() noexcept override { std::ranges::advance(iterator, 1); }
+            bool equals(const AIter& other) const noexcept override {
+                return other.type() == type() && static_cast<const Iter<TIt>&>(other).iterator == iterator;
+            }
+            const std::type_info& type() const override { return typeid(this); }
+            std::unique_ptr<AIter> clone() const override { return std::make_unique<Iter<TIt>>(*this); }
+        };
 
-		std::unique_ptr<Concept> _impl;
+        std::unique_ptr<AIter> impl;
+    public:
+        GenericIterator(const GenericIterator& other) : impl(other.impl->clone()) {}
 
-	public:
-		template <std::input_or_output_iterator Iter>
-		generic_iterator(Iter iter) : _impl(std::make_unique<ConcreteIter<Iter>>(iter)){};
+        template<std::input_or_output_iterator TIt>
+        explicit GenericIterator(TIt iterator) noexcept : impl(std::make_unique<Iter<TIt>>(iterator)) {}
+        
+        template<std::input_or_output_iterator TIt, typename K>
+        GenericIterator(TIt iterator, std::shared_ptr<K> userdata) noexcept : impl(std::make_unique<Iter<TIt>>(iterator, userdata)) {}
 
-		generic_iterator(const generic_iterator& r) : _impl(r._impl->clone()){};
-
-		value_type operator*() const { return _impl->deref(); }
-
-		generic_iterator& operator++() {
-			_impl->next(1);
-			return *this;
-		}
-
-		bool operator==(const generic_iterator& r) const {
-			return _impl->type() == r._impl->type() and _impl->equal(r._impl->address());
-		}
-
-		bool operator!=(const generic_iterator& r) const { return not(*this == r); }
-	};
+        T operator*() const { return impl->deref(); }
+        GenericIterator& operator++() noexcept {
+            impl->advance();
+            return *this;
+        }
+        bool operator==(const GenericIterator& other) const { return impl->equals(*other.impl); }
+    };
 } // namespace mogli::utils

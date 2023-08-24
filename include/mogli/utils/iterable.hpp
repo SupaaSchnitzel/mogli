@@ -2,20 +2,30 @@
 
 #include "generic_iterator.hpp"
 
+#include <iterator>
+#include <memory>
+#include <ranges>
+
 namespace mogli::utils {
     template<typename T>
     class Iterable final {
     private:
-        generic_iterator<T> _begin;
-        generic_iterator<T> _end;
-
+        GenericIterator<T> _begin;
+        GenericIterator<T> _end;
+    
     public:
-        Iterable(generic_iterator<T> begin, generic_iterator<T> end) noexcept : _begin(begin), _end(end) {}
+        template<std::input_or_output_iterator IterB, std::input_or_output_iterator IterE>
+        Iterable(IterB begin, IterE end) noexcept : _begin(begin), _end(end) {}
 
-        template<typename Container>
-        explicit Iterable(Container c) noexcept : Iterable(std::ranges::begin(c), std::ranges::end(c)) {}
+        template<std::input_or_output_iterator IterB, std::input_or_output_iterator IterE, typename U>
+        Iterable(IterB begin, IterE end, std::shared_ptr<U> userdata) noexcept : _begin(begin, userdata), _end(end, userdata) {}
 
-        generic_iterator<T> begin() const noexcept { return _begin; }
-        generic_iterator<T> end() const noexcept { return _end; }
+        Iterable(std::ranges::range auto& container) noexcept : Iterable(std::ranges::begin(container), std::ranges::end(container)) {}
+
+        template <typename U>
+        Iterable(std::ranges::range auto& container, std::shared_ptr<U> userdata) noexcept : Iterable(std::ranges::begin(container), std::ranges::end(container), userdata) {}
+
+        const GenericIterator<T>& begin() const noexcept { return _begin; }
+        const GenericIterator<T>& end() const noexcept { return _end; }
     };
 }
