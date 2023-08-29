@@ -1,12 +1,13 @@
 #pragma once
 
-#include "game.hpp"
-#include "filesystem/gameentry.hpp"
 #include "../utils/iterable.hpp"
+#include "./game.hpp"
 
+#include <filesystem>
 #include <inttypes.h>
-#include <optional>
 #include <memory>
+#include <optional>
+#include <string>
 #include <variant>
 
 namespace mogli::lib {
@@ -17,6 +18,13 @@ namespace mogli::lib {
 		std::string username;
 		std::string password;
 		std::string dbname;
+	};
+
+	struct GameDBEntry {
+		int id;
+		std::filesystem::path path;
+		std::string title;
+		std::optional<std::string> description;
 	};
 
 	/**
@@ -63,9 +71,11 @@ namespace mogli::lib {
 		 */
 		virtual const char* getErrorMessage(ErrorCode error) noexcept = 0;
 
-		virtual ErrorCode addGame(mogli::lib::GameEntry entry) noexcept = 0;
+		virtual ErrorCode addGame(mogli::lib::Game entry) noexcept = 0;
 
-		virtual std::variant</*std::shared_ptr<*/mogli::utils::Iterable<Game>/*>*/, ErrorCode> games() noexcept = 0;
+		virtual std::variant<mogli::utils::Iterable<GameDBEntry>, ErrorCode> games() noexcept = 0;
+
+		virtual ErrorCode getGame(GameID id, GameDBEntry& entry) noexcept = 0;
 	};
 
 	std::unique_ptr<IGameDatabase> createPostgreSQLConnector();

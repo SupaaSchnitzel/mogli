@@ -19,7 +19,7 @@ void sigintHandler(int signal) {
 }
 
 struct RunAppArgs {
-	std::filesystem::path mediaRoot;
+	mogli::lib::LibMgrConfig libConf;
 	mogli::rest::RESTConfig restConf;
 	mogli::lib::DBConfig dbConf;
 };
@@ -34,8 +34,7 @@ static void runRunCommand(const RunAppArgs args) {
 	auto database = mogli::lib::createPostgreSQLConnector();
 	auto dbError = database->setup(args.dbConf);
 	if (dbError == mogli::lib::IGameDatabase::Success) {
-		mogli::lib::LibMgrConfig config{.root = "/media"};
-		mogli::lib::LibraryManager libmgr(config, *database);
+		mogli::lib::LibraryManager libmgr(args.libConf, *database);
 		mogli::rest::RESTEndpoint endpoint(libmgr, args.restConf);
 		::endpoint = &endpoint;
 		
@@ -74,7 +73,7 @@ int main(int argc, char* argv[]) {
 	RunAppArgs runArgs;
 	CLI::App& runApp = *app.add_subcommand("run", "Runs the mogli REST-server and library manager");
 	runApp.set_config("-c,--config");
-	runApp.add_option("--media", runArgs.mediaRoot, "The root directory of all media")
+	runApp.add_option("--media", runArgs.libConf.root, "The root directory of all media")
 		->configurable(true)
 		->envname("MOGLI_MEDIA_ROOT_DIR");
 	runApp.add_option("--host", runArgs.restConf.host, "The host to bind the REST-server to")

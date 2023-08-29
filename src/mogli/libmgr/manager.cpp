@@ -1,49 +1,60 @@
 #include <mogli/libmgr/manager.hpp>
 
+#include <mogli/libmgr/filesystem/gameentry.hpp>
+
 #include <exception>
 #include <map>
 
 using namespace mogli::lib;
+using mogli::utils::Iterable;
+using std::views::transform;
 
-static std::map<GameID, Game> gamesdata{
-		{"0001",
-		 Game{
-				 .id = "0001",
-				 .title = "The Witcher 3: Wild Hunt - Complete Edition",
-				 .description = "Hello World",
-				 .tags = {"Adventure", "Fantasy", "Role-playing"},
-		 }},
-		{"0002",
-		 Game{
-				 .id = "0002",
-				 .title = "The Elder Scrolls V: Skyrim Anniversary Edition",
-				 .description = "Hello World",
-				 .tags = {"Adventure", "Fantasy", "Role-playing"},
-		 }},
-};
+#include <iostream>
 
-Games::Iterator::Iterator(T iterator) : value(iterator) {}
-Games::Iterator& Games::Iterator::operator++() {
-	value++;
-	return *this;
+static Game toGame(GameDBEntry entry) {
+	std::map<std::string, std::filesystem::path> media;
+	/** \todo remove hardcoded, use config **/
+	auto globalpath = std::filesystem::path("/workspaces/mogli/tests/testfiles/media") / entry.path;
+	GameEntry file{std::filesystem::directory_entry(globalpath)};
+	auto addToMedia = [&media](std::string name) { return [&media, name](auto path) { return media[name] = path; }; };
+	file.getLogo().transform(addToMedia("logo"));
+	file.getBanner().transform(addToMedia("banner"));
+	file.getBoxart().transform(addToMedia("boxart"));
+	return Game {
+		.id = entry.id,
+		.path = globalpath,
+		.title = entry.title,
+		.description = entry.description,
+		.tags = {"TODO"}, /** \todo implement */
+		.media = media
+	};
 }
-Games::Iterator Games::Iterator::operator++(int) {
-	auto retval = *this;
-	++(*this);
-	return retval;
+
+Games::Games(LibraryManager& libmgr) noexcept : libmgr(libmgr) {}
+
+Game Games::operator[](GameID id) const noexcept {
+	GameDBEntry entry;
+	auto error = libmgr.database.getGame(id, entry);
+	if (error == IGameDatabase::Success) {
+		return toGame(entry);
+	} else {
+		/** \todo log error **/
+		return {};
+	}
 }
-bool Games::Iterator::operator==(Games::Iterator other) const noexcept { return value == other.value; }
-bool Games::Iterator::operator!=(Games::Iterator other) const noexcept { return value != other.value; }
-Game Games::Iterator::operator*() const noexcept { return value->second; }
 
-Games::Iterator Games::begin() { return Games::Iterator(gamesdata.begin()); }
-
-Games::Iterator Games::end() { return Games::Iterator(gamesdata.end()); }
-
-Game Games::operator[](GameID id) const noexcept { return gamesdata[id]; }
+Iterable<Game> Games::all() const noexcept {
+	auto games = libmgr.database.games();
+	if (std::holds_alternative<Iterable<GameDBEntry>>(games))
+		return Iterable<Game>(std::get<Iterable<GameDBEntry>>(games) | transform(toGame));
+	/** \todo use logger **/
+	std::cout << "Failed to fetch games: " << libmgr.database.getErrorMessage(std::get<IGameDatabase::ErrorCode>(games)) << std::endl;
+	//logger->error("Failed to fetch games: {}", libmgr.database.getErrorMessage(std::get<IGameDatabase::ErrorCode>(games)));
+	return Iterable<Game>();
+}
 
 LibraryManager::LibraryManager(LibMgrConfig config, IGameDatabase& database)
-		: logger(mogli::log::getLogger("Library")), config(config), database(database) {
+		: logger(mogli::log::getLogger("Library")), config(config), database(database), games(*this) {
 	logger->info("Initializing Library Manager");
 }
 
@@ -52,7 +63,7 @@ std::string LibraryManager::getGameMetadata(GameID gameTitle) { throw std::runti
 int LibraryManager::addGame(std::string gameInfo) { throw std::runtime_error("Not implemented"); }
 
 int LibraryManager::scanThread() {
-	if (!std::filesystem::is_directory(config.root))
+	/*if (!std::filesystem::is_directory(config.root))
 		return -1;
 	for (std::filesystem::directory_entry const& dir_entry : std::filesystem::directory_iterator{config.root}) {
 		if (!dir_entry.is_directory())
@@ -62,11 +73,12 @@ int LibraryManager::scanThread() {
 		if (!addGame(gameInfo))
 			return -1;
 	}
-	return -1;
+	return -1;*/
+	throw std::runtime_error("Not implemented");
 }
 
 int LibraryManager::rescanThread() {
-	if (!std::filesystem::is_directory(config.root))
+	/*if (!std::filesystem::is_directory(config.root))
 		return -1;
 	for (std::filesystem::directory_entry const& dir_entry : std::filesystem::directory_iterator{config.root}) {
 		if (!dir_entry.is_directory())
@@ -77,7 +89,8 @@ int LibraryManager::rescanThread() {
 		if (!addGame(gameInfo))
 			return -1;
 	}
-	return -1;
+	return -1;*/
+	throw std::runtime_error("Not implemented");
 }
 
 int LibraryManager::scan() { throw std::runtime_error("Not implemented"); }

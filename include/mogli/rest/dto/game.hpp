@@ -19,7 +19,7 @@ namespace mogli::rest::dto {
 	class GameInfo : public oatpp::DTO {
 		DTO_INIT(GameInfo, DTO)
 
-		DTO_FIELD(String, id);
+		DTO_FIELD(Int32, id);
 		DTO_FIELD(String, title);
 		DTO_FIELD(String, description);
 		DTO_FIELD(Vector<String>, tags);

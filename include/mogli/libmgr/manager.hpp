@@ -7,32 +7,25 @@
 #include <map>
 
 #include "../logging.hpp"
+#include "../utils/iterable.hpp"
 #include "config.hpp"
 #include "database.hpp"
 #include "game.hpp"
 #include "filesystem/scanner.hpp"
 
 namespace mogli::lib {
+	class LibraryManager;
+
 	struct Games {
-		class Iterator final {
-		private:
-			using reference = Game&;
-			using T = std::map<GameID, Game>::const_iterator;
-			T value;
+		friend LibraryManager;
+	private:
+		LibraryManager& libmgr;
 
-		public:
-			explicit Iterator(T iterator);
-			Iterator& operator++();
-			Iterator operator++(int);
-			bool operator==(Iterator other) const noexcept;
-			bool operator!=(Iterator other) const noexcept;
-			Game operator*() const noexcept;
-		};
-
+		Games(LibraryManager& libmgr) noexcept;
+	public:
 		Game operator[](GameID id) const noexcept;
-
-		Iterator begin();
-		Iterator end();
+		
+		mogli::utils::Iterable<Game> all() const noexcept;
 	};
 
 	/**
@@ -44,6 +37,7 @@ namespace mogli::lib {
 	 * IGameDatabase.
 	 */
 	class LibraryManager final {
+		friend Games;
 	private:
 		/**
 		 * @brief The logger the library manager should write to.

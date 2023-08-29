@@ -4,43 +4,22 @@
 
 #include <soci/postgresql/soci-postgresql.h>
 #include <soci/soci.h>
+#include <soci/std-optional.h>
 
 #include <format>
 #include <iostream>
 #include <ranges>
 
 using namespace mogli::lib;
+using mogli::utils::Iterable;
 using std::views::transform;
 
-struct Tmp {
-	mogli::utils::GenericIterator<Game> _begin;
-	mogli::utils::GenericIterator<Game> _end;
-
-	template <std::input_or_output_iterator IterB, std::input_or_output_iterator IterE>
-	Tmp(IterB begin, IterE end) noexcept : _begin(begin), _end(end) {}
-
-	Tmp(auto& container) noexcept : _begin(container.begin()), _end(container.end()) {}
-
-	const mogli::utils::GenericIterator<Game>& begin() const { return _begin; }
-	const mogli::utils::GenericIterator<Game>& end() const { return _end; }
-};
-
-template <typename T> static std::optional<T> getOpt(const soci::row& row, std::string column) {
-	if (row.get_indicator(column) == soci::indicator::i_ok)
-		return row.get<T>(column);
-	return std::nullopt;
-}
-
-static Game toGame(const soci::row& row) {
-	Game game;
-	auto entry = GameEntry(std::filesystem::directory_entry(row.get<std::string>("path")));
-	game.id = std::to_string(row.get<int>("id"));
-	/** \fixme the name from the database should have precedence over the file name but not over the name within the
-
-	 * * info.yaml*/
-	game.title = getOpt<std::string>(row, "title").value_or(entry.getName());
-	game.description = getOpt<std::string>(row, "description") /*.value_or(entry.getDescription())*/;
-	return game;
+static GameDBEntry toGameDBEntry(const soci::row& row) {
+	return GameDBEntry{
+			.id = row.get<int>("id"),
+			.path = row.get<std::string>("path"),
+			.title = row.get<std::string>("title"),
+			.description = row.get<std::optional<std::string>>("description")};
 }
 
 class PostgreGameDatabase final : public IGameDatabase {
@@ -79,6 +58,14 @@ private:
                     path        VARCHAR(255) NOT NULL UNIQUE
                 );
             )";
+			session << R"(
+                CREATE TABLE tags (
+                    gameid	INTEGER NOT NULL,
+					tag		TEXT NOT NULL,
+					PRIMARY KEY (gameid, tag),
+					FOREIGN KEY (gameid) REFERENCES games(id)
+                );
+            )";
 			transaction.commit();
 			logger->info("Database was set up");
 			return true;
@@ -87,6 +74,19 @@ private:
 					"Failed to set up the database schema: [{}] {}", (int)e.get_error_category(), e.get_error_message()
 			);
 			return false;
+		}
+	}
+
+	ErrorCode fetchTags(GameID gameid, std::vector<std::string>& tags) {
+		try {
+			session << "SELECT tag FROM tags WHERE gameid=:id", soci::into(tags), soci::use(gameid);
+			return ErrorCodes::success;
+		} catch (soci::soci_error& e) {
+			logger->error(
+					"Failed to fetch tags for gameid {}: [{}] {}", gameid, (int)e.get_error_category(),
+					e.get_error_message()
+			);
+			return ErrorCodes::genericError;
 		}
 	}
 
@@ -157,19 +157,43 @@ public:
 		return ErrorCodes::success;
 	}
 
-	ErrorCode addGame(mogli::lib::GameEntry entry) noexcept override {
-		/** \todo implement **/
-		return ErrorCodes::genericError;
+	ErrorCode addGame(mogli::lib::Game entry) noexcept override {
+		try {
+			soci::transaction transaction(session);
+			/** \todo implement **/
+			session << "INSERT INTO games(title, description, path) VALUES (:title, :description, :path)",
+					soci::use(entry.title), soci::use(entry.description), soci::use((std::string)entry.path);
+			transaction.commit();
+			return ErrorCodes::genericError;
+		} catch (soci::soci_error& e) {
+			logger->critical(
+					"Failed to add game to database [{}]: {}", (int)e.get_error_category(), e.get_error_message()
+			);
+			return ErrorCodes::genericError;
+		}
 	}
 
-	std::variant<mogli::utils::Iterable<Game>, ErrorCode> games() noexcept override {
+	std::variant<Iterable<GameDBEntry>, ErrorCode> games() noexcept override {
 		try {
-			soci::rowset<soci::row> rows = session.prepare << R"(SELECT id, title, description, path FROM games)";
-			auto view = std::views::all(std::move(rows)) | transform(toGame);
-			auto viewptr = std::make_shared<decltype(view)>(std::move(view));
-			return mogli::utils::Iterable<Game>(*viewptr, viewptr);
+			soci::rowset<soci::row> rows = session.prepare << "SELECT id, title, description, path FROM games";
+			return Iterable<GameDBEntry>(std::views::all(std::move(rows)) | transform(toGameDBEntry));
 		} catch (soci::soci_error& e) {
 			logger->critical("Failed to iterate games [{}]: {}", (int)e.get_error_category(), e.get_error_message());
+			return ErrorCodes::genericError;
+		}
+	}
+
+	ErrorCode getGame(GameID id, GameDBEntry& entry) noexcept override {
+		try {
+			std::string path;
+			session << "SELECT id, title, description, path FROM games WHERE id=:id", soci::into(entry.id),
+					soci::into(entry.title), soci::into(entry.description), soci::into(path), soci::use(id);
+			entry.path = path;
+			return ErrorCodes::success;
+		} catch (soci::soci_error& e) {
+			logger->error(
+					"Failed to fetch game with id {} [{}]: {}", id, (int)e.get_error_category(), e.get_error_message()
+			);
 			return ErrorCodes::genericError;
 		}
 	}

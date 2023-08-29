@@ -41,6 +41,15 @@ static std::optional<dirent> getMemberFile(dirent dir, std::string name) noexcep
 	return std::nullopt;
 }
 
+static std::optional<dirent> findMemberFile(dirent dir, std::string name, std::vector<path> searchPaths) noexcept {
+	for (const auto& subpath : searchPaths) {
+		auto result = getMemberFile(dirent{dir.path() / subpath}, name);
+		if (result.has_value())
+			return result;
+	}
+	return std::nullopt;
+}
+
 inline static bool isPicture(std::filesystem::path path) {
 	static const char* picExtensions[] = {".png", ".jpg", ".jpeg", ".webp", ".tiff"};
 	return std::find(std::begin(picExtensions), std::end(picExtensions), path.extension()) != std::end(picExtensions);
@@ -66,7 +75,8 @@ std::optional<ryml::ConstNodeRef> GameEntry::getInfoEntryNode(std::vector<std::s
 	return std::nullopt;
 }
 
-template <> std::optional<std::string> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
+template <>
+std::optional<std::string> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
 	if (!node.has_val()) {
 		std::vector<std::string> path;
 		for (auto n = node; n.has_parent(); n = n.parent())
@@ -77,7 +87,8 @@ template <> std::optional<std::string> GameEntry::getNodeValue(const ryml::Const
 	return std::make_optional(std::string(node.val().begin(), node.val().end()));
 }
 
-template <> std::optional<int> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
+template <>
+std::optional<int> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
 	if (!node.has_val()) {
 		std::vector<std::string> path;
 		for (auto n = node; n.has_parent(); n = n.parent())
@@ -99,7 +110,8 @@ template <> std::optional<int> GameEntry::getNodeValue(const ryml::ConstNodeRef&
 	return std::make_optional(i);
 }
 
-template <> std::optional<float> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
+template <>
+std::optional<float> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) const noexcept {
 	if (!node.has_val()) {
 		std::vector<std::string> path;
 		for (auto n = node; n.has_parent(); n = n.parent())
@@ -200,13 +212,13 @@ static dirent toDirEntry(std::string path) { return dirent(path); }
 
 std::optional<dirent> GameEntry::getLogo() const noexcept {
 	return getInfoEntry<std::string>({"media", "logo"}).transform(toDirEntry).or_else([this] {
-		return getMemberFile(entry, "logo");
+		return findMemberFile(entry, "logo", {".", "media"});
 	});
 }
 
 std::optional<dirent> GameEntry::getBanner() const noexcept {
 	return getInfoEntry<std::string>({"media", "banner"}).transform(toDirEntry).or_else([this] {
-		return getMemberFile(entry, "banner");
+		return findMemberFile(entry, "banner", {".", "media"});
 	});
 }
 

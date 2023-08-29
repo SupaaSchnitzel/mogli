@@ -4,10 +4,13 @@
 
 #include <oatpp/web/server/interceptor/AllowCorsGlobal.hpp>
 
-using LibraryManager = mogli::lib::LibraryManager;
-using RESTEndpoint = mogli::rest::RESTEndpoint;
-using RESTConfig = mogli::rest::RESTConfig;
-using Controller = mogli::rest::Controller;
+using mogli::lib::LibraryManager;
+using mogli::rest::RESTEndpoint;
+using mogli::rest::RESTConfig;
+using mogli::rest::Controller;
+
+using oatpp::web::server::interceptor::AllowCorsGlobal;
+using oatpp::web::server::interceptor::AllowOptionsGlobal;
 
 unsigned RESTEndpoint::InstanceCounter = 0;
 
@@ -18,8 +21,10 @@ bool RESTEndpoint::init() {
 	try {
 		logger->info("Initializing REST Endpoint...");
 		// Create the global oatpp environment if this is the first endpoint to use it
-		if (RESTEndpoint::InstanceCounter == 0)
+		if (RESTEndpoint::InstanceCounter == 0) {
 			oatpp::base::Environment::init();
+			logger->info("Created oatpp environment");
+		}
 		++RESTEndpoint::InstanceCounter;
 
 		OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::data::mapping::ObjectMapper>, apiObjectMapper)
@@ -37,9 +42,9 @@ bool RESTEndpoint::init() {
 
 		logger->info("Initializing connection handler");
 		auto connectionHandler = HttpConnectionHandler::createShared(router);
-		connectionHandler->addRequestInterceptor(std::make_shared<oatpp::web::server::interceptor::AllowOptionsGlobal>());
-		connectionHandler->addResponseInterceptor(std::make_shared<oatpp::web::server::interceptor::AllowCorsGlobal>());
-		logger->info("Initializing TCP connection provider");
+		connectionHandler->addRequestInterceptor(std::make_shared<AllowOptionsGlobal>());
+		connectionHandler->addResponseInterceptor(std::make_shared<AllowCorsGlobal>());
+		logger->info("Initializing TCP connection provider to listen to {}:{}", config.host, config.port);
 		auto version = config.useIPv4 ? oatpp::network::Address::IP_4 : oatpp::network::Address::IP_6;
 		connectionProvider = ConnectionProvider::createShared({config.host, config.port, version});
 		logger->info("Initializing server");
@@ -59,8 +64,10 @@ void RESTEndpoint::deinit() {
 
 	// Destroy the global oatpp environment if this was the last endpoint to use it
 	--RESTEndpoint::InstanceCounter;
-	if (RESTEndpoint::InstanceCounter == 0)
+	if (RESTEndpoint::InstanceCounter == 0) {
 		oatpp::base::Environment::destroy();
+		logger->info("Destroyed oatpp environment");
+	}
 	logger->info("Server deinitialized");
 }
 
