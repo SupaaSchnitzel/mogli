@@ -224,7 +224,7 @@ std::optional<dirent> GameEntry::getBanner() const noexcept {
 
 std::optional<dirent> GameEntry::getBoxart() const noexcept {
 	return getInfoEntry<std::string>({"media", "boxart"}).transform(toDirEntry).or_else([this] {
-		return getMemberFile(entry, "boxart");
+		return findMemberFile(entry, "boxart", {".", "media"});
 	});
 }
 

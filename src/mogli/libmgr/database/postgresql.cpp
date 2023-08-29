@@ -25,9 +25,10 @@ static GameDBEntry toGameDBEntry(const soci::row& row) {
 class PostgreGameDatabase final : public IGameDatabase {
 public:
 	static constexpr int CurrentSchemaVersion = 1;
+	static constexpr size_t ConnectionPoolSize = 5;
 
 private:
-	soci::session session;
+	soci::connection_pool pool{ConnectionPoolSize};
 	mogli::log::LoggerPtr logger;
 
 	struct ErrorCodes {
@@ -39,6 +40,7 @@ private:
 
 	bool tableExists(std::string table) noexcept {
 		int exists;
+		soci::session session(pool);
 		session << R"(SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = :tbl);)",
 				soci::into(exists), soci::use(table);
 		return exists != 0;
@@ -47,6 +49,7 @@ private:
 	bool setupDatabase() noexcept {
 		logger->info("Seting up the database schema");
 		try {
+			soci::session session(pool);
 			soci::transaction transaction(session);
 			session.create_table("meta").column("version", soci::data_type::dt_integer);
 			session << "INSERT INTO meta(version) VALUES (:version)", soci::use(CurrentSchemaVersion);
@@ -79,6 +82,7 @@ private:
 
 	ErrorCode fetchTags(GameID gameid, std::vector<std::string>& tags) {
 		try {
+			soci::session session(pool);
 			session << "SELECT tag FROM tags WHERE gameid=:id", soci::into(tags), soci::use(gameid);
 			return ErrorCodes::success;
 		} catch (soci::soci_error& e) {
@@ -93,6 +97,7 @@ private:
 	int fetchDBSchemaVersion() noexcept {
 		try {
 			int version = -1;
+			soci::session session(pool);
 			session << "SELECT version FROM meta;", soci::into(version);
 			return version;
 		} catch (soci::soci_error& e) {
@@ -108,7 +113,7 @@ private:
 public:
 	PostgreGameDatabase() : logger(mogli::log::getLogger("Database")) {
 		/** \todo replace with actual calls to the logger in TRACE mode **/
-		session.set_log_stream(&std::cout);
+		// session.set_log_stream(&std::cout);
 	}
 	~PostgreGameDatabase() override {}
 
@@ -119,7 +124,10 @@ public:
 					"host={} port={} user={} password={} dbname={}", config.host, config.port, config.username,
 					config.password, config.dbname
 			);
-			session.open(soci::postgresql, connectString);
+			for (size_t i = 0; i < ConnectionPoolSize; ++i) {
+				auto& session = pool.at(i);
+				session.open(soci::postgresql, connectString);
+			}
 
 			// Check if database was set up
 			if (!tableExists("meta")) {
@@ -153,12 +161,16 @@ public:
 	}
 
 	ErrorCode teardown() noexcept override {
-		session.close();
+		for (size_t i = 0; i < ConnectionPoolSize; ++i) {
+			auto& session = pool.at(i);
+			session.close();
+		}
 		return ErrorCodes::success;
 	}
 
 	ErrorCode addGame(mogli::lib::Game entry) noexcept override {
 		try {
+			soci::session session(pool);
 			soci::transaction transaction(session);
 			/** \todo implement **/
 			session << "INSERT INTO games(title, description, path) VALUES (:title, :description, :path)",
@@ -175,6 +187,7 @@ public:
 
 	std::variant<Iterable<GameDBEntry>, ErrorCode> games() noexcept override {
 		try {
+			soci::session session(pool);
 			soci::rowset<soci::row> rows = session.prepare << "SELECT id, title, description, path FROM games";
 			return Iterable<GameDBEntry>(std::views::all(std::move(rows)) | transform(toGameDBEntry));
 		} catch (soci::soci_error& e) {
@@ -186,6 +199,7 @@ public:
 	ErrorCode getGame(GameID id, GameDBEntry& entry) noexcept override {
 		try {
 			std::string path;
+			soci::session session(pool);
 			session << "SELECT id, title, description, path FROM games WHERE id=:id", soci::into(entry.id),
 					soci::into(entry.title), soci::into(entry.description), soci::into(path), soci::use(id);
 			entry.path = path;
