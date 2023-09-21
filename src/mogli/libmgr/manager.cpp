@@ -41,8 +41,8 @@ Game Games::operator[](GameID id) const noexcept {
 		libmgr.database.fetchTags(game.id, game.tags);
 		return game;
 	} else {
-		/** \todo log error **/
-		return {};
+		libmgr.logger->debug("Failed to fetch game by id ({}): {}", id, libmgr.database.getErrorMessage(error));
+		return {.id = InvalidGameID};
 	}
 }
 

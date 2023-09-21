@@ -38,6 +38,7 @@ private:
 		static constexpr ErrorCode genericError = 1;
 		static constexpr ErrorCode setupFailed = 2;
 		static constexpr ErrorCode dbTooNew = 3;
+		static constexpr ErrorCode noSuchGame = 4;
 	};
 
 	bool tableExists(std::string table) noexcept {
@@ -208,10 +209,11 @@ public:
 	ErrorCode getGame(GameID id, GameDBEntry& entry) noexcept override {
 		try {
 			soci::session session(pool);
+			entry.id = InvalidGameID;
 			session << "SELECT id, title, description, path, last_updated FROM games WHERE id=:id",
 					soci::into(entry.id), soci::into(entry.title), soci::into(entry.description),
 					soci::into(entry.path), soci::into(entry.lastUpdated), soci::use(id);
-			return ErrorCodes::success;
+			return entry.id == InvalidGameID? ErrorCodes::noSuchGame : ErrorCodes::success;
 		} catch (soci::soci_error& e) {
 			logger->error(
 					"Failed to fetch game with id {} [{}]: {}", id, (int)e.get_error_category(), e.get_error_message()
@@ -245,6 +247,8 @@ public:
 			return "Failed to Setup the DB Schema";
 		case ErrorCodes::dbTooNew:
 			return "Database is a higher version than this client";
+		case ErrorCodes::noSuchGame:
+			return "No game could be found that satisfies the specified predicate";
 		default:
 			return "Invalid Error Code";
 		};

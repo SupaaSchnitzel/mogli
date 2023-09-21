@@ -9,6 +9,8 @@
 namespace mogli::lib {
 	using GameID = int;
 
+	constexpr GameID InvalidGameID = -1;
+
 	struct Game final {
 		GameID id;
 		std::filesystem::path path;

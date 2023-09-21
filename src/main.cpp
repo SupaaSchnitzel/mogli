@@ -19,9 +19,26 @@ void sigintHandler(int signal) {
 }
 
 struct RunAppArgs {
+	bool quiet = false;
+	/**
+	 * @brief Sets the verbosity of the logger. Per default (verbosity=0) only critical, error and warnings are printed.
+	 * If verbosity is...
+	 *  - 1: info and above is printed
+	 *  - 2: debug and above is printed
+	 *  - 3+: trace and above is printed
+	 */
+	int verbosity = 0;
 	mogli::lib::LibMgrConfig libConf;
 	mogli::rest::RESTConfig restConf;
 	mogli::lib::DBConfig dbConf;
+
+	mogli::log::Verbosity getVerbosity() const noexcept {
+		if (quiet)
+			return mogli::log::Verbosity::Off;
+		auto verb = static_cast<int>(mogli::log::Verbosity::Warning) + verbosity;
+		verb = std::min(verb, static_cast<int>(mogli::log::Verbosity::Trace));
+		return static_cast<mogli::log::Verbosity>(verb);
+	}
 };
 
 struct ScanAppArgs {
@@ -29,23 +46,18 @@ struct ScanAppArgs {
 };
 
 static void runRunCommand(const RunAppArgs args) {
+	mogli::log::setVerbosity(args.getVerbosity());
 	auto logger = mogli::log::getLogger("Mogli");
 	logger->info("Launching mogli v.{}", mogli::version);
 	auto database = mogli::lib::createPostgreSQLConnector();
 	auto dbError = database->setup(args.dbConf);
-	/*database->addGame(mogli::lib::Game{
-		.path = "example-media/Skyrim Anniversary Edition [gogid-1801825368]",
-		.title = "Skyrim Anniversary Edition",
-		.description = std::nullopt,
-		.tags = {"Hello", "World"}
-	});*/
 	if (dbError == mogli::lib::IGameDatabase::Success) {
 		mogli::lib::LibraryManager libmgr(args.libConf, *database);
 		mogli::rest::RESTEndpoint endpoint(libmgr, args.restConf);
 		::endpoint = &endpoint;
 		
 		if (endpoint.init()) {
-			logger->info("Instanting sigint handler");
+			logger->info("Instantiating sigint handler");
 			std::signal(SIGINT, sigintHandler);
 
 			logger->info("Setup done");
@@ -110,6 +122,8 @@ int main(int argc, char* argv[]) {
 	runApp.add_option("--dbpassword", runArgs.dbConf.password, "The database user password to log in with")
 		->configurable(true)
 		->envname("MOGLI_DB_PASSWORD");
+	runApp.add_flag("-v,--verbose", runArgs.verbosity, "Sets the logger's verbosity. Passing it multiple times increases verbosity.");
+	runApp.add_flag("-q,--quiet", runArgs.quiet, "Supresses all outputs");
 	runApp.callback({[&runArgs]() { runRunCommand(runArgs); }});
 
 	// Scan Command

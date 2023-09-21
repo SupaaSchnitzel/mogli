@@ -24,13 +24,6 @@ static dto::GameInfo::Wrapper toDTO(const mogli::lib::Game& game) noexcept {
 	dto->media->logo = std::format("/games/{}/media/logo", game.id);
 	dto->media->banner = std::format("/games/{}/media/banner", game.id);
 	dto->media->boxart = std::format("/games/{}/media/boxart", game.id);
-
-	// dto->media->logo =
-	// "https://images.gog-statics.com/16a042d9ad86c137414df42707c88a09339acc9b8dc495b9cd5fe895d6ec0af4.jpg";
-	// dto->media->banner =
-	// "https://images.gog-statics.com/e3088bde9f3e6fa08141df4c38c25e8c5a9404cbcae31dac29933a6f4c40550e.jpg";
-	// dto->media->boxart =
-	// "https://images.gog-statics.com/2d9394e5d51c8625c1c674f908c2267fe85caad145f05413ffa3a7664036d62a.jpg";
 	return dto;
 }
 
@@ -48,8 +41,12 @@ std::shared_ptr<Controller::Response> Controller::getGames() {
 std::shared_ptr<Controller::Response> Controller::getGame(const oatpp::Int32& gameid) {
 	logger->trace("/game/{}", *gameid.get());
 	auto game = libmgr.games[*gameid.get()];
-	auto dto = toDTO(game);
-	return createDtoResponse(Status::CODE_200, dto);
+	if (game.id != mogli::lib::InvalidGameID) {
+		auto dto = toDTO(game);
+		return createDtoResponse(Status::CODE_200, dto);
+	} else {
+		return createResponse(Status::CODE_404, "");
+	}
 }
 
 std::shared_ptr<Controller::Response> Controller::deleteGame(const oatpp::Int32& gameid) {
