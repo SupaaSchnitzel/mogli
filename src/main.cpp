@@ -33,6 +33,12 @@ static void runRunCommand(const RunAppArgs args) {
 	logger->info("Launching mogli v.{}", mogli::version);
 	auto database = mogli::lib::createPostgreSQLConnector();
 	auto dbError = database->setup(args.dbConf);
+	/*database->addGame(mogli::lib::Game{
+		.path = "example-media/Skyrim Anniversary Edition [gogid-1801825368]",
+		.title = "Skyrim Anniversary Edition",
+		.description = std::nullopt,
+		.tags = {"Hello", "World"}
+	});*/
 	if (dbError == mogli::lib::IGameDatabase::Success) {
 		mogli::lib::LibraryManager libmgr(args.libConf, *database);
 		mogli::rest::RESTEndpoint endpoint(libmgr, args.restConf);

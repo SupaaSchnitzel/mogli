@@ -16,7 +16,13 @@
 namespace mogli::lib {
 	class LibraryManager;
 
-	struct Games {
+	/**
+	 * @brief Abstraction layer around the game database for a more readable API.
+	 * @details The Games class wraps around the IGameDatabase implementation in the LibraryManager to provide an
+	 * intuitive interface for retrieving game information and iterating over games. This class should not be manually
+	 * instantiated. Instead use LibraryManager::games.
+	 */
+	struct Games final {
 		friend LibraryManager;
 	private:
 		LibraryManager& libmgr;
@@ -38,6 +44,7 @@ namespace mogli::lib {
 	 */
 	class LibraryManager final {
 		friend Games;
+		friend Scanner;
 	private:
 		/**
 		 * @brief The logger the library manager should write to.
@@ -66,27 +73,15 @@ namespace mogli::lib {
 		 */
 		int addGame(std::string gameInfo);
 
-		/**
-		 * @brief This scans the whole filesystem starting from the root folder. Checks all found games for metadata and
-		 * adds them to the Databases.
-		 *
-		 * @return Returns a positive integer if scan was sucessfully started.
-		 */
-		int scanThread();
-
-		/**
-		 * @brief This scans the whole filesystem starting from the root folder. Checks newly found games for metadata
-		 * and adds them to the Databases.
-		 *
-		 * @return Returns a positive integer if scan was sucessfully finished.
-		 */
-		int rescanThread();
-
 		// It would not really make sense to assign and copy the library manager
 		LibraryManager(const LibraryManager& other) = delete;
 		LibraryManager& operator=(LibraryManager& other) = delete;
 
 	public:
+		/**
+		 * @brief Abstracts the gamedatabase API to be more readable. Use this to retrieve information from the
+		 * database. Note that changes in the filesystem will only be applied to the database after scanning.
+		 */
 		Games games;
 
 		/**
@@ -97,22 +92,6 @@ namespace mogli::lib {
 		 * @param database the database implementation to store games into.
 		 */
 		LibraryManager(LibMgrConfig config, IGameDatabase& database);
-
-		/**
-		 * @brief This scans the whole filesystem starting from the root folder. Checks all found games for metadata and
-		 * adds them to the Databases. This function is threaded.
-		 *
-		 * @return Returns a positive integer if scan was sucessfully started.
-		 */
-		int scan();
-
-		/**
-		 * @brief This scans the whole filesystem starting from the root folder. Checks newly found games for metadata
-		 * and adds them to the Databases. This function is threaded.
-		 *
-		 * @return Returns a positive integer if scan was sucessfully finished.
-		 */
-		int rescan();
 
 		/**
 		 * Overrides the Metadata for a single game.

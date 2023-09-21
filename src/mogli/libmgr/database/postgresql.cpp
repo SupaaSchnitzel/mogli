@@ -1,5 +1,7 @@
 #include <mogli/libmgr/database.hpp>
 
+#include <mogli/libmgr/database/soci/std-path.hpp>
+#include <mogli/libmgr/database/soci/std-reference_wrapper.hpp>
 #include <mogli/logging.hpp>
 
 #include <soci/postgresql/soci-postgresql.h>
@@ -7,7 +9,6 @@
 #include <soci/std-optional.h>
 
 #include <format>
-#include <iostream>
 #include <ranges>
 
 using namespace mogli::lib;
@@ -19,7 +20,8 @@ static GameDBEntry toGameDBEntry(const soci::row& row) {
 			.id = row.get<int>("id"),
 			.path = row.get<std::string>("path"),
 			.title = row.get<std::string>("title"),
-			.description = row.get<std::optional<std::string>>("description")};
+			.description = row.get<std::optional<std::string>>("description"),
+			.lastUpdated = row.get<std::tm>("last_updated")};
 }
 
 class PostgreGameDatabase final : public IGameDatabase {
@@ -55,10 +57,11 @@ private:
 			session << "INSERT INTO meta(version) VALUES (:version)", soci::use(CurrentSchemaVersion);
 			session << R"(
                 CREATE TABLE games (
-                    id          SERIAL PRIMARY KEY,
-                    title       TEXT NOT NULL,
-                    description TEXT,
-                    path        VARCHAR(255) NOT NULL UNIQUE
+                    id           SERIAL PRIMARY KEY,
+                    title        TEXT NOT NULL,
+                    description  TEXT,
+                    path         VARCHAR(255) NOT NULL UNIQUE,
+					last_updated DATE NOT NULL DEFAULT CURRENT_DATE
                 );
             )";
 			session << R"(
@@ -80,20 +83,6 @@ private:
 		}
 	}
 
-	ErrorCode fetchTags(GameID gameid, std::vector<std::string>& tags) {
-		try {
-			soci::session session(pool);
-			session << "SELECT tag FROM tags WHERE gameid=:id", soci::into(tags), soci::use(gameid);
-			return ErrorCodes::success;
-		} catch (soci::soci_error& e) {
-			logger->error(
-					"Failed to fetch tags for gameid {}: [{}] {}", gameid, (int)e.get_error_category(),
-					e.get_error_message()
-			);
-			return ErrorCodes::genericError;
-		}
-	}
-
 	int fetchDBSchemaVersion() noexcept {
 		try {
 			int version = -1;
@@ -101,8 +90,7 @@ private:
 			session << "SELECT version FROM meta;", soci::into(version);
 			return version;
 		} catch (soci::soci_error& e) {
-			/** \todo in the future this should be critical since it prohibits possibly migrating the db **/
-			logger->error(
+			logger->critical(
 					"Failed to fetch the database schema version: [{}] {}", (int)e.get_error_category(),
 					e.get_error_message()
 			);
@@ -172,10 +160,15 @@ public:
 		try {
 			soci::session session(pool);
 			soci::transaction transaction(session);
-			/** \todo implement **/
-			session << "INSERT INTO games(title, description, path) VALUES (:title, :description, :path)",
-					soci::use(entry.title), soci::use(entry.description), soci::use((std::string)entry.path);
+			session << "INSERT INTO games(title, description, path) VALUES (:title, :description, :path) RETURNING id",
+					soci::use(entry.title), soci::use(entry.description), soci::use(entry.path), soci::into(entry.id);
+			/** \todo implement adding tags **/
+			/** \todo I don't like to have to copy the gameid here but views (like, e.g., std::views::repeat) don't seem
+			 * to be supported by soci :(; Maybe this can be changed in the future. **/
+			std::vector<std::reference_wrapper<GameID>> gameids(entry.tags.size(), entry.id);
+			session << "INSERT INTO tags(gameid, tag) VALUES (:gameid, :tag)", soci::use(gameids), soci::use(entry.tags);
 			transaction.commit();
+			logger->info("Created new game with id {}", entry.id);
 			return ErrorCodes::genericError;
 		} catch (soci::soci_error& e) {
 			logger->critical(
@@ -185,28 +178,58 @@ public:
 		}
 	}
 
-	std::variant<Iterable<GameDBEntry>, ErrorCode> games() noexcept override {
+	ErrorCode fetchGames(mogli::utils::Iterable<GameDBEntry>& games) noexcept override {
 		try {
 			soci::session session(pool);
-			soci::rowset<soci::row> rows = session.prepare << "SELECT id, title, description, path FROM games";
-			return Iterable<GameDBEntry>(std::views::all(std::move(rows)) | transform(toGameDBEntry));
+			soci::rowset<soci::row> rows = session.prepare << "SELECT id, title, description, path, last_updated FROM games";
+			games = Iterable<GameDBEntry>(std::views::all(std::move(rows)) | transform(toGameDBEntry));
+			return ErrorCodes::success;
 		} catch (soci::soci_error& e) {
 			logger->critical("Failed to iterate games [{}]: {}", (int)e.get_error_category(), e.get_error_message());
 			return ErrorCodes::genericError;
 		}
 	}
 
+	ErrorCode fetchTags(GameID gameid, std::vector<std::string>& tags) noexcept override {
+		try {
+			soci::session session(pool);
+			tags.resize(50); // soci needs the vector to initially be resized to the maximum results we allow
+			session << "SELECT tag FROM tags WHERE gameid=:id", soci::into(tags), soci::use(gameid);
+			return ErrorCodes::success;
+		} catch (soci::soci_error& e) {
+			logger->error(
+					"Failed to fetch tags for gameid {}: [{}] {}", gameid, (int)e.get_error_category(),
+					e.get_error_message()
+			);
+			return ErrorCodes::genericError;
+		}
+	}
+
 	ErrorCode getGame(GameID id, GameDBEntry& entry) noexcept override {
 		try {
-			std::string path;
 			soci::session session(pool);
-			session << "SELECT id, title, description, path FROM games WHERE id=:id", soci::into(entry.id),
-					soci::into(entry.title), soci::into(entry.description), soci::into(path), soci::use(id);
-			entry.path = path;
+			session << "SELECT id, title, description, path, last_updated FROM games WHERE id=:id",
+					soci::into(entry.id), soci::into(entry.title), soci::into(entry.description),
+					soci::into(entry.path), soci::into(entry.lastUpdated), soci::use(id);
 			return ErrorCodes::success;
 		} catch (soci::soci_error& e) {
 			logger->error(
 					"Failed to fetch game with id {} [{}]: {}", id, (int)e.get_error_category(), e.get_error_message()
+			);
+			return ErrorCodes::genericError;
+		}
+	}
+
+	ErrorCode getGame(std::filesystem::path path, GameDBEntry& entry) noexcept override {
+		try {
+			soci::session session(pool);
+			session << "SELECT id, title, description, path, last_updated FROM games WHERE path=:path",
+					soci::into(entry.id), soci::into(entry.title), soci::into(entry.description),
+					soci::into(entry.path), soci::into(entry.lastUpdated), soci::use(path);
+			return ErrorCodes::success;
+		} catch (soci::soci_error& e) {
+			logger->error(
+					"Failed to fetch game by path {} [{}]: {}", path.c_str(), (int)e.get_error_category(), e.get_error_message()
 			);
 			return ErrorCodes::genericError;
 		}

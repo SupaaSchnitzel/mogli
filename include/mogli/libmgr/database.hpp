@@ -3,6 +3,7 @@
 #include "../utils/iterable.hpp"
 #include "./game.hpp"
 
+#include <ctime>
 #include <filesystem>
 #include <inttypes.h>
 #include <memory>
@@ -25,6 +26,7 @@ namespace mogli::lib {
 		std::filesystem::path path;
 		std::string title;
 		std::optional<std::string> description;
+		std::tm lastUpdated;
 	};
 
 	/**
@@ -73,9 +75,13 @@ namespace mogli::lib {
 
 		virtual ErrorCode addGame(mogli::lib::Game entry) noexcept = 0;
 
-		virtual std::variant<mogli::utils::Iterable<GameDBEntry>, ErrorCode> games() noexcept = 0;
+		virtual ErrorCode fetchGames(mogli::utils::Iterable<GameDBEntry>& games) noexcept = 0;
+
+		virtual ErrorCode fetchTags(GameID gameid, std::vector<std::string>& tags) noexcept = 0;
 
 		virtual ErrorCode getGame(GameID id, GameDBEntry& entry) noexcept = 0;
+
+		virtual ErrorCode getGame(std::filesystem::path path, GameDBEntry& entry) noexcept = 0;
 	};
 
 	std::unique_ptr<IGameDatabase> createPostgreSQLConnector();

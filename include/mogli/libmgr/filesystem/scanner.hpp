@@ -4,12 +4,16 @@
 
 namespace mogli::lib {
 
-	class Scanner final {
-	private:
-		virtual bool hasChanges(std::filesystem::directory_entry entry);
+	class LibraryManager;
 
+	class Scanner final {
+		friend LibraryManager;
+	private:
+		LibraryManager& libmgr;
+
+		Scanner(LibraryManager& libraryManager) noexcept;
 	public:
-		void scan(std::filesystem::path path);
+		void scan(std::filesystem::path path) const noexcept;
 	};
 
 }

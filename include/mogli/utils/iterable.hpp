@@ -135,8 +135,8 @@ namespace mogli::utils {
 		 * @return A reference to this.
 		 */
 		Iterable& operator=(Iterable&& other) noexcept {
-			begin = std::move(other.begin);
-			end = std::move(other.end);
+			_begin = std::move(other._begin);
+			_end = std::move(other._end);
 			return *this;
 		}
 

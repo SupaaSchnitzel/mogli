@@ -16,7 +16,17 @@
 
 "<b>M</b>y <b>O</b>wn <b>G</b>ame-<b>LI</b>brary" (mogli) is a self-hosted tool for managing your own library of DRM-free game installers. We started this project because we wanted to be able to host our own games library on a home server, like it is possible with other collections. Since there is no such tool available at the moment, we decided to build it ourselves.
 
+### Planned Features
+ - Authentication with OIDC or OAuth
+ - Fetching game metadata from external databases (e.g. gogdb)
+ - Users can upload gamefiles or installers
+ - Allow users to import their GOG library to mogli
+
+
 ## 🚀 Deployment
+### Linux
+`TODO`
+### Docker
 `TODO`
 
 
@@ -57,4 +67,5 @@ We have made great use of the following awesome projects:
  - [Doxygen](https://www.doxygen.nl/)
  - [Oat++](https://oatpp.io/)
  - [PostgreSQL](https://www.postgresql.org)
+ - [soci](https://github.com/SOCI/soci)
  - [spdlog](https://github.com/gabime/spdlog)
