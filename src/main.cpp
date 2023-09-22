@@ -9,6 +9,7 @@
 #include <assert.h>
 #include <csignal>
 #include <format>
+#include <ranges>
 
 #include <iostream>
 
@@ -55,7 +56,7 @@ static void runRunCommand(const RunAppArgs args) {
 		mogli::lib::LibraryManager libmgr(args.libConf, *database);
 		mogli::rest::RESTEndpoint endpoint(libmgr, args.restConf);
 		::endpoint = &endpoint;
-		
+
 		if (endpoint.init()) {
 			logger->info("Instantiating sigint handler");
 			std::signal(SIGINT, sigintHandler);
@@ -80,50 +81,59 @@ static void runScanCommand(const ScanAppArgs args) {
 	throw std::runtime_error("Not yet implemented");
 }
 
-const std::string versionString = std::format("mogli v.{}", mogli::version);
+const std::string mogliVersion = std::format("mogli v.{}", mogli::version);
+const std::string cliVersion = "CLI11 v." CLI11_VERSION;
+const std::string timestamp = "Commit " GIT_COMMIT_HASH;
 
 int main(int argc, char* argv[]) {
 	/** \todo Maybe add a better description of the app. **/
 	CLI::App app("Manage your own game library.");
-	app.set_version_flag("-v,--version", versionString);
+	std::vector<std::string> libs{
+			mogliVersion, cliVersion, mogli::log::getVersionStr(), mogli::rest::getVersionStr(), timestamp
+	};
+	/** \todo Use std::format instead of fmt. **/
+	app.set_version_flag("-v,--version", fmt::to_string(fmt::join(libs, "\n")));
 
 	// Run Command
 	RunAppArgs runArgs;
 	CLI::App& runApp = *app.add_subcommand("run", "Runs the mogli REST-server and library manager");
 	runApp.set_config("-c,--config");
-	runApp.add_option("--media", runArgs.libConf.root, "The root directory of all media")
-		->configurable(true)
-		->envname("MOGLI_MEDIA_ROOT_DIR");
-	runApp.add_option("--host", runArgs.restConf.host, "The host to bind the REST-server to")
-		->default_val("localhost")
-		->configurable(true)
-		->envname("MOGLI_REST_HOST");
-	runApp.add_option("--port", runArgs.restConf.port, "The port used by the REST-server")
-		->default_val(8000)
-		->configurable(true)
-		->envname("MOGLI_REST_PORT");
-	runApp.add_flag("--ipv4", runArgs.restConf.useIPv4, "Use IPv4 for the REST-server")
-		->default_val(true)
-		->configurable(true)
-		->envname("MOGLI_REST_IPV4");
-	runApp.add_option("--dbhost", runArgs.dbConf.host, "The database host to connect to")
-		->configurable(true)
-		->envname("MOGLI_DB_HOST");
-	runApp.add_option("--dbport", runArgs.dbConf.port, "The database port to connect to")
-		->default_val(5432)
-		->configurable(true)
-		->envname("MOGLI_DB_PORT");
-	runApp.add_option("--dbname", runArgs.dbConf.dbname, "The name of the database")
-		->configurable(true)
-		->envname("MOGLI_DB_NAME");
-	runApp.add_option("--dbuser", runArgs.dbConf.username, "The database user account to log into")
-		->configurable(true)
-		->envname("MOGLI_DB_USER");
-	runApp.add_option("--dbpassword", runArgs.dbConf.password, "The database user password to log in with")
-		->configurable(true)
-		->envname("MOGLI_DB_PASSWORD");
-	runApp.add_flag("-v,--verbose", runArgs.verbosity, "Sets the logger's verbosity. Passing it multiple times increases verbosity.");
+	runApp.add_flag(
+			"-v,--verbose", runArgs.verbosity,
+			"Sets the logger's verbosity. Passing it multiple times increases verbosity."
+	);
 	runApp.add_flag("-q,--quiet", runArgs.quiet, "Supresses all outputs");
+	runApp.add_option("--media", runArgs.libConf.root, "The root directory of all media")
+			->configurable(true)
+			->envname("MOGLI_MEDIA_ROOT_DIR");
+	runApp.add_option("--host", runArgs.restConf.host, "The host to bind the REST-server to")
+			->default_val("localhost")
+			->configurable(true)
+			->envname("MOGLI_REST_HOST");
+	runApp.add_option("--port", runArgs.restConf.port, "The port used by the REST-server")
+			->default_val(8000)
+			->configurable(true)
+			->envname("MOGLI_REST_PORT");
+	runApp.add_flag("--ipv4", runArgs.restConf.useIPv4, "Use IPv4 for the REST-server")
+			->default_val(true)
+			->configurable(true)
+			->envname("MOGLI_REST_IPV4");
+	runApp.add_option("--dbhost", runArgs.dbConf.host, "The database host to connect to")
+			->configurable(true)
+			->envname("MOGLI_DB_HOST");
+	runApp.add_option("--dbport", runArgs.dbConf.port, "The database port to connect to")
+			->default_val(5432)
+			->configurable(true)
+			->envname("MOGLI_DB_PORT");
+	runApp.add_option("--dbname", runArgs.dbConf.dbname, "The name of the database")
+			->configurable(true)
+			->envname("MOGLI_DB_NAME");
+	runApp.add_option("--dbuser", runArgs.dbConf.username, "The database user account to log into")
+			->configurable(true)
+			->envname("MOGLI_DB_USER");
+	runApp.add_option("--dbpassword", runArgs.dbConf.password, "The database user password to log in with")
+			->configurable(true)
+			->envname("MOGLI_DB_PASSWORD");
 	runApp.callback({[&runArgs]() { runRunCommand(runArgs); }});
 
 	// Scan Command
@@ -131,10 +141,10 @@ int main(int argc, char* argv[]) {
 	CLI::App& scanApp = *app.add_subcommand("scan", "Scans mogli's libraries and updates the database accordingly");
 	scanApp.set_config("-c,--config");
 	scanApp.add_option("--media", scanArgs.mediaRoot, "The root directory of all media")
-		->configurable(true)
-		->envname("MEDIA_ROOT_DIR");
+			->configurable(true)
+			->envname("MEDIA_ROOT_DIR");
 	scanApp.callback({[&scanArgs]() { runScanCommand(scanArgs); }});
-	
+
 	CLI11_PARSE(app, argc, argv);
 	return 0;
 }

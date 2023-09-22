@@ -9,6 +9,9 @@
 #include "config.hpp"
 
 namespace mogli::rest {
+
+	const char* getVersionStr() noexcept;
+
 	/**
 	 * @brief RESTEndpoint implements a server that provides the REST-API interface to external tools.
 	 */

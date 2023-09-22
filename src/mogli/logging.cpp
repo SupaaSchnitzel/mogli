@@ -2,7 +2,14 @@
 
 #include <spdlog/sinks/stdout_color_sinks.h>
 
+#include <format>
+
 using LoggerPtr = mogli::log::LoggerPtr;
+
+const char* mogli::log::getVersionStr() noexcept {
+	static auto version = std::format("spdlog v.{}.{}.{}", SPDLOG_VER_MAJOR, SPDLOG_VER_MINOR, SPDLOG_VER_PATCH);
+	return version.c_str();
+}
 
 void mogli::log::setVerbosity(mogli::log::Verbosity verbosity) noexcept {
 	auto level = spdlog::level::off - static_cast<int>(verbosity);

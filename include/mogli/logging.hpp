@@ -11,6 +11,8 @@ namespace mogli::log {
 		Off, Critical, Error, Warning, Info, Debug, Trace
 	};
 
+	const char* getVersionStr() noexcept;
+
 	/**
 	 * @brief Globally set the verbosity for all loggers to the one specified.
 	 * 

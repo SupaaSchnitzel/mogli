@@ -14,6 +14,10 @@ using oatpp::web::server::interceptor::AllowOptionsGlobal;
 
 unsigned RESTEndpoint::InstanceCounter = 0;
 
+const char* mogli::rest::getVersionStr() noexcept {
+	return "Oat++ v." OATPP_VERSION;
+}
+
 RESTEndpoint::RESTEndpoint(LibraryManager& libmgr, RESTConfig config)
 		: logger(mogli::log::getLogger("REST")), libmgr(libmgr), config(config) {}
 

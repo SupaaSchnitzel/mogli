@@ -23,6 +23,22 @@ target_compile_features(mogliexe PUBLIC cxx_std_23)
 target_link_libraries(mogliexe mogli)
 
 
+# Tell the code about the current git commit hash
+# (http://xit0.org/2013/04/cmake-use-git-branch-and-commit-details-in-project/)
+execute_process(
+    COMMAND git rev-parse --abbrev-ref HEAD
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_BRANCH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+execute_process(
+	COMMAND git rev-parse HEAD
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_COMMIT_HASH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+target_compile_definitions(mogliexe PRIVATE "-DGIT_COMMIT_HASH=\"${GIT_COMMIT_HASH}\"")
+
 
 ##########################################################################################
 # Libraries
