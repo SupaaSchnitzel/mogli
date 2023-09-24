@@ -25,10 +25,7 @@ namespace mogli::rest {
 		std::shared_ptr<ConnectionProvider> connectionProvider;
 		std::shared_ptr<Server> server;
 
-		/**
-		 * @brief The logger which should be used by RESTEndpoint instances.
-		 */
-		const mogli::log::LoggerPtr logger;
+		const mogli::log::LoggerPtr logger; /**< The logger which should be used by RESTEndpoint instances. */
 		mogli::lib::LibraryManager& libmgr;
 		const RESTConfig config;
 
@@ -38,33 +35,27 @@ namespace mogli::rest {
 		/**
 		 * @brief Creates a new instance from the provided configurations.
 		 * 
-		 * @param config the
-		 * config that should be used for anything related to the RESTEndpoint.
+		 * @param config the config that should be used for anything related to the RESTEndpoint.
 		 */
-		explicit RESTEndpoint(mogli::lib::LibraryManager& libmgr, RESTConfig config);
+		explicit RESTEndpoint(mogli::lib::LibraryManager& libmgr, const RESTConfig& config);
 		/**
-		 * @brief Initializes this endpoint. This method should only be called once per instance and, if
-		 * successful,
+		 * @brief Initializes this endpoint. This method should only be called once per instance and, if successful,
 		 * must be followed by a call to #deinit
 		 * 
-		 * @return true on success, else false. 
-
+		 * @return true on success, else false.
 		 */
 		bool init();
 		/**
 		 * @brief TODO: add documentation
-		 * 
 		 */
 		void deinit();
 
 		/**
 		 * @brief TODO: add documentation
-		 * 
 		 */
 		void run();
 		/**
 		 * @brief TODO: add documentation
-		 * 
 		 */
 		void stop();
 	};

@@ -6,10 +6,6 @@ add_library(mogli STATIC
 	mogli/libmgr/database/postgresql.cpp
 	mogli/libmgr/filesystem/gameentry.cpp
 	mogli/libmgr/filesystem/scanner.cpp
-	mogli/libmgr/provider/gogprovider.cpp
-	mogli/libmgr/provider/gogdbprovider.cpp
-	mogli/libmgr/provider/steamprovider.cpp
-	mogli/libmgr/provider/localprovider.cpp
 	mogli/rest/controller/controller.cpp
 	mogli/rest/endpoint.cpp
 	mogli/logging.cpp

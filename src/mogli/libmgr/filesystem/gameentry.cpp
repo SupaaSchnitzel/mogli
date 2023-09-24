@@ -133,7 +133,8 @@ std::optional<float> GameEntry::getNodeValue(const ryml::ConstNodeRef& node) con
 	return std::make_optional(f);
 }
 
-template <typename T> std::optional<T> GameEntry::getInfoEntry(std::vector<std::string> path) const noexcept {
+template <typename T>
+std::optional<T> GameEntry::getInfoEntry(std::vector<std::string> path) const noexcept {
 	auto node = getInfoEntryNode(path);
 	return node.and_then([this](auto n) { return getNodeValue<T>(n); });
 }

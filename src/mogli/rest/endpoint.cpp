@@ -5,20 +5,18 @@
 #include <oatpp/web/server/interceptor/AllowCorsGlobal.hpp>
 
 using mogli::lib::LibraryManager;
-using mogli::rest::RESTEndpoint;
-using mogli::rest::RESTConfig;
 using mogli::rest::Controller;
+using mogli::rest::RESTConfig;
+using mogli::rest::RESTEndpoint;
 
 using oatpp::web::server::interceptor::AllowCorsGlobal;
 using oatpp::web::server::interceptor::AllowOptionsGlobal;
 
 unsigned RESTEndpoint::InstanceCounter = 0;
 
-const char* mogli::rest::getVersionStr() noexcept {
-	return "Oat++ v." OATPP_VERSION;
-}
+const char* mogli::rest::getVersionStr() noexcept { return "Oat++ v." OATPP_VERSION; }
 
-RESTEndpoint::RESTEndpoint(LibraryManager& libmgr, RESTConfig config)
+RESTEndpoint::RESTEndpoint(LibraryManager& libmgr, const RESTConfig& config)
 		: logger(mogli::log::getLogger("REST")), libmgr(libmgr), config(config) {}
 
 bool RESTEndpoint::init() {

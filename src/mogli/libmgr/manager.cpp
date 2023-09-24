@@ -20,14 +20,14 @@ static Game toGame(GameDBEntry entry) {
 	file.getLogo().transform(addToMedia("logo"));
 	file.getBanner().transform(addToMedia("banner"));
 	file.getBoxart().transform(addToMedia("boxart"));
-	return Game {
-		.id = entry.id,
-		.path = globalpath,
-		.title = entry.title,
-		.description = entry.description,
-		/* The GameDBEntry does not contain tags since they have to be fetched manually via IGameDatabase::fetchTags */
-		.tags = {},
-		.media = media
+	return Game{
+			.id = entry.id,
+			.path = globalpath,
+			.title = entry.title,
+			.description = entry.description,
+			// The GameDBEntry does not contain tags since they have to be fetched manually via IGameDatabase::fetchTags
+			.tags = {},
+			.media = media
 	};
 }
 

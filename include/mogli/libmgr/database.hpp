@@ -49,7 +49,7 @@ namespace mogli::lib {
 		 * class.
 		 */
 		static constexpr ErrorCode Success = 0;
-		
+
 		/**
 		 * @brief Performs any required setup that is too complex for the constructor.
 		 * 

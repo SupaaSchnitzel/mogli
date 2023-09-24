@@ -19,4 +19,4 @@ namespace mogli::lib {
 		std::vector<std::string> tags;
 		std::map<std::string, std::filesystem::path> media;
 	};
-};
+}; // namespace mogli::lib

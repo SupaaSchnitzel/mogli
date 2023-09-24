@@ -9,7 +9,7 @@ namespace mogli::rest::dto {
 
 	class GameMedia : public oatpp::DTO {
 		DTO_INIT(GameMedia, DTO)
-		
+
 		DTO_FIELD(String, logo);
 		DTO_FIELD(String, icon);
 		DTO_FIELD(String, banner);
@@ -25,6 +25,6 @@ namespace mogli::rest::dto {
 		DTO_FIELD(Vector<String>, tags);
 		DTO_FIELD(Object<GameMedia>, media);
 	};
-}
+} // namespace mogli::rest::dto
 
 #include OATPP_CODEGEN_END(DTO)

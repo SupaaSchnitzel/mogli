@@ -23,10 +23,11 @@ namespace mogli::lib {
 	class GameEntry final {
 	public:
 		using path_or_url = std::variant<std::filesystem::path, std::string>;
+
 	private:
-		mogli::log::LoggerPtr logger; /**< The logger the library manager should write to. **/
+		mogli::log::LoggerPtr logger;			/**< The logger the library manager should write to. **/
 		std::filesystem::directory_entry entry; /**< The directory that holds this game's informations. **/
-		std::optional<ryml::Tree> yaml; /**< The parsed yaml file contents. **/
+		std::optional<ryml::Tree> yaml;			/**< The parsed yaml file contents. **/
 
 		/**
 		 * @brief Retrieves the yaml tree node associated with the provided path. If the path does not exist, empty is
@@ -43,14 +44,15 @@ namespace mogli::lib {
 		 * @param path 
 		 * @return T 
 		 */
-		template<typename T>
+		template <typename T>
 		std::optional<T> getInfoEntry(std::vector<std::string> path) const noexcept;
 
 		template <typename T>
 		std::optional<std::vector<T>> getInfoSeqEntry(std::vector<std::string> path) const noexcept;
 
-		template<typename T>
+		template <typename T>
 		std::optional<T> getNodeValue(const ryml::ConstNodeRef& node) const noexcept;
+
 	public:
 		/**
 		 * @brief Construct a new GameEntry object that is associated with the provided directory.

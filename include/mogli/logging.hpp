@@ -7,9 +7,7 @@
 namespace mogli::log {
 	using LoggerPtr = std::shared_ptr<spdlog::logger>;
 
-	enum class Verbosity : int {
-		Off, Critical, Error, Warning, Info, Debug, Trace
-	};
+	enum class Verbosity : int { Off, Critical, Error, Warning, Info, Debug, Trace };
 
 	const char* getVersionStr() noexcept;
 
@@ -35,16 +33,14 @@ namespace mogli::log {
 ///////////////////////////
 #include <spdlog/fmt/bundled/format.h>
 
-template<typename T>
+template <typename T>
 struct fmt::formatter<std::optional<T>> {
-    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
-        return ctx.end();
-    }
+	constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) { return ctx.end(); }
 
-    template <typename FormatContext>
-    auto format(const std::optional<T>& input, FormatContext& ctx) -> decltype(ctx.out()) {
+	template <typename FormatContext>
+	auto format(const std::optional<T>& input, FormatContext& ctx) -> decltype(ctx.out()) {
 		if (input.has_value())
 			return fmt::format_to(ctx.out(), "{}", input.value());
 		return fmt::format_to(ctx.out(), "<EMPTY>");
-    }
+	}
 };

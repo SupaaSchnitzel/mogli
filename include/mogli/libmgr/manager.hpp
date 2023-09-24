@@ -10,8 +10,8 @@
 #include "../utils/iterable.hpp"
 #include "config.hpp"
 #include "database.hpp"
-#include "game.hpp"
 #include "filesystem/scanner.hpp"
+#include "game.hpp"
 
 namespace mogli::lib {
 	class LibraryManager;
@@ -24,13 +24,15 @@ namespace mogli::lib {
 	 */
 	struct Games final {
 		friend LibraryManager;
+
 	private:
 		LibraryManager& libmgr;
 
 		Games(LibraryManager& libmgr) noexcept;
+
 	public:
 		Game operator[](GameID id) const noexcept;
-		
+
 		mogli::utils::Iterable<Game> all() const noexcept;
 	};
 
@@ -45,20 +47,11 @@ namespace mogli::lib {
 	class LibraryManager final {
 		friend Games;
 		friend Scanner;
-	private:
-		/**
-		 * @brief The logger the library manager should write to.
-		 */
-		mogli::log::LoggerPtr logger;
-		/**
-		 * @brief The concrete mogli game database to use.
-		 */
-		IGameDatabase& database;
 
-		/**
-		 * @brief The config of the library manager.
-		 */
-		LibMgrConfig config;
+	private:
+		mogli::log::LoggerPtr logger; /**< The logger the library manager should write to. **/
+		IGameDatabase& database;	  /**< The concrete mogli game database to use. **/
+		LibMgrConfig config;		  /**< The config of the library manager. **/
 
 		/**
 		 * @brief Queries the gamedb specified in the config and returns the metadata for the given gameTitle.

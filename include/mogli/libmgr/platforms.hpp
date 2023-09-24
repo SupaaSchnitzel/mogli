@@ -1,14 +1,10 @@
 #pragma once
 
 namespace mogli::lib {
-	enum class Platform {
-		Windows,
-		Linux,
-		Mac
-	};
+	enum class Platform { Windows, Linux, Mac };
 
 	inline const char* getName(Platform platform) {
-		switch(platform) {
+		switch (platform) {
 		case Platform::Windows:
 			return "Windows";
 		case Platform::Linux:
@@ -21,7 +17,7 @@ namespace mogli::lib {
 	}
 
 	inline unsigned getPlatformID(Platform platform) {
-		switch(platform) {
+		switch (platform) {
 		case Platform::Windows:
 			return 0;
 		case Platform::Linux:
@@ -32,4 +28,4 @@ namespace mogli::lib {
 			return -1;
 		};
 	}
-}
+} // namespace mogli::lib

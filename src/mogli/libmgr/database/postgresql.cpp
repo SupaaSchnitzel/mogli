@@ -21,7 +21,8 @@ static GameDBEntry toGameDBEntry(const soci::row& row) {
 			.path = row.get<std::string>("path"),
 			.title = row.get<std::string>("title"),
 			.description = row.get<std::optional<std::string>>("description"),
-			.lastUpdated = row.get<std::tm>("last_updated")};
+			.lastUpdated = row.get<std::tm>("last_updated")
+	};
 }
 
 class PostgreGameDatabase final : public IGameDatabase {
@@ -167,7 +168,8 @@ public:
 			/** \todo I don't like to have to copy the gameid here but views (like, e.g., std::views::repeat) don't seem
 			 * to be supported by soci :(; Maybe this can be changed in the future. **/
 			std::vector<std::reference_wrapper<GameID>> gameids(entry.tags.size(), entry.id);
-			session << "INSERT INTO tags(gameid, tag) VALUES (:gameid, :tag)", soci::use(gameids), soci::use(entry.tags);
+			session << "INSERT INTO tags(gameid, tag) VALUES (:gameid, :tag)", soci::use(gameids),
+					soci::use(entry.tags);
 			transaction.commit();
 			logger->info("Created new game with id {}", entry.id);
 			return ErrorCodes::genericError;
@@ -182,7 +184,8 @@ public:
 	ErrorCode fetchGames(mogli::utils::Iterable<GameDBEntry>& games) noexcept override {
 		try {
 			soci::session session(pool);
-			soci::rowset<soci::row> rows = session.prepare << "SELECT id, title, description, path, last_updated FROM games";
+			soci::rowset<soci::row> rows = session.prepare
+										   << "SELECT id, title, description, path, last_updated FROM games";
 			games = Iterable<GameDBEntry>(std::views::all(std::move(rows)) | transform(toGameDBEntry));
 			return ErrorCodes::success;
 		} catch (soci::soci_error& e) {
@@ -213,7 +216,7 @@ public:
 			session << "SELECT id, title, description, path, last_updated FROM games WHERE id=:id",
 					soci::into(entry.id), soci::into(entry.title), soci::into(entry.description),
 					soci::into(entry.path), soci::into(entry.lastUpdated), soci::use(id);
-			return entry.id == InvalidGameID? ErrorCodes::noSuchGame : ErrorCodes::success;
+			return entry.id == InvalidGameID ? ErrorCodes::noSuchGame : ErrorCodes::success;
 		} catch (soci::soci_error& e) {
 			logger->error(
 					"Failed to fetch game with id {} [{}]: {}", id, (int)e.get_error_category(), e.get_error_message()
@@ -231,7 +234,8 @@ public:
 			return ErrorCodes::success;
 		} catch (soci::soci_error& e) {
 			logger->error(
-					"Failed to fetch game by path {} [{}]: {}", path.c_str(), (int)e.get_error_category(), e.get_error_message()
+					"Failed to fetch game by path {} [{}]: {}", path.c_str(), (int)e.get_error_category(),
+					e.get_error_message()
 			);
 			return ErrorCodes::genericError;
 		}
