@@ -10,7 +10,6 @@ FetchContent_MakeAvailable(catch)
 
 add_executable(tests
 	# Add test files here
-	sample_test.cpp
 	mogli/libmgr/filesystem/gameentry_test.cpp
 )
 
