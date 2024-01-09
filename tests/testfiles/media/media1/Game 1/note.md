@@ -1,0 +1,1 @@
+This game does not have any metadata set and does not provide an info.yml file.

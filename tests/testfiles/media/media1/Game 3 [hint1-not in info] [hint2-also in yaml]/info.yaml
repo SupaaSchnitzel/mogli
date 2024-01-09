@@ -1,0 +1,6 @@
+title: Title from YAML
+developer:
+  - Developer A Inc.
+hints:
+  hint2: value from yaml
+  hint from yaml: 42
