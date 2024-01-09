@@ -9,9 +9,6 @@ namespace mogli::lib {
 	 * @brief Contains the library manager configuration options.
 	 */
 	struct LibMgrConfig {
-		/**
-		 * @brief The filepath to the root folder of the game library.
-		 */
-		const std::filesystem::path root;
+		std::filesystem::path root; /**< The filepath to the root folder of the game library. **/
 	};
 } // namespace mogli::lib

@@ -12,7 +12,6 @@
 namespace mogli::rest {
 	/**
 	 * @brief TODO: add documentation
-	 * 
 	 */
 	class Controller final : public oatpp::web::server::api::ApiController {
 	public:
@@ -20,6 +19,7 @@ namespace mogli::rest {
 		using Response = oatpp::web::protocol::http::outgoing::Response;
 
 	private:
+		mogli::log::LoggerPtr logger;
 		mogli::lib::LibraryManager& libmgr;
 
 	public:
@@ -28,7 +28,6 @@ namespace mogli::rest {
 		 * 
 		 * @param objectMapper
 		 * @param libmgr
-
 		 */
 		explicit Controller(
 				mogli::lib::LibraryManager& libmgr, OATPP_COMPONENT(std::shared_ptr<ObjectMapper>, objectMapper)
@@ -43,12 +42,20 @@ namespace mogli::rest {
 		 * @brief TODO: add documentation
 		 * 
 		 */
-		ENDPOINT("GET", "/games/{gameid}", getGame, PATH(oatpp::String, gameid));
+		ENDPOINT("GET", "/games/{gameid}", getGame, PATH(oatpp::Int32, gameid));
 		/**
 		 * @brief TODO: add documentation
 		 * 
 		 */
-		ENDPOINT("DELETE", "/games/{gameid}", deleteGame, PATH(oatpp::String, gameid));
+		ENDPOINT("DELETE", "/games/{gameid}", deleteGame, PATH(oatpp::Int32, gameid));
+		/**
+		 * @brief TODO: add documentation
+		 * 
+		 */
+		ENDPOINT(
+				"GET", "/games/{gameid}/media/{media}", getGameMedia, PATH(oatpp::Int32, gameid),
+				PATH(oatpp::String, media)
+		);
 		/**
 		 * @brief TODO: add documentation
 		 * 

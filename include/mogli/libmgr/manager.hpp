@@ -7,32 +7,33 @@
 #include <map>
 
 #include "../logging.hpp"
+#include "../utils/iterable.hpp"
 #include "config.hpp"
 #include "database.hpp"
-#include "game.hpp"
 #include "filesystem/scanner.hpp"
+#include "game.hpp"
 
 namespace mogli::lib {
-	struct Games {
-		class Iterator final {
-		private:
-			using reference = Game&;
-			using T = std::map<GameID, Game>::const_iterator;
-			T value;
+	class LibraryManager;
 
-		public:
-			explicit Iterator(T iterator);
-			Iterator& operator++();
-			Iterator operator++(int);
-			bool operator==(Iterator other) const noexcept;
-			bool operator!=(Iterator other) const noexcept;
-			const Game& operator*() const noexcept;
-		};
+	/**
+	 * @brief Abstraction layer around the game database for a more readable API.
+	 * @details The Games class wraps around the IGameDatabase implementation in the LibraryManager to provide an
+	 * intuitive interface for retrieving game information and iterating over games. This class should not be manually
+	 * instantiated. Instead use LibraryManager::games.
+	 */
+	struct Games final {
+		friend LibraryManager;
 
+	private:
+		LibraryManager& libmgr;
+
+		Games(LibraryManager& libmgr) noexcept;
+
+	public:
 		Game operator[](GameID id) const noexcept;
 
-		Iterator begin();
-		Iterator end();
+		mogli::utils::Iterable<Game> all() const noexcept;
 	};
 
 	/**
@@ -44,20 +45,13 @@ namespace mogli::lib {
 	 * IGameDatabase.
 	 */
 	class LibraryManager final {
-	private:
-		/**
-		 * @brief The logger the library manager should write to.
-		 */
-		mogli::log::LoggerPtr logger;
-		/**
-		 * @brief The concrete mogli game database to use.
-		 */
-		IGameDatabase& database;
+		friend Games;
+		friend Scanner;
 
-		/**
-		 * @brief The config of the library manager.
-		 */
-		LibMgrConfig config;
+	private:
+		mogli::log::LoggerPtr logger; /**< The logger the library manager should write to. **/
+		IGameDatabase& database;	  /**< The concrete mogli game database to use. **/
+		LibMgrConfig config;		  /**< The config of the library manager. **/
 
 		/**
 		 * @brief Queries the gamedb specified in the config and returns the metadata for the given gameTitle.
@@ -72,27 +66,15 @@ namespace mogli::lib {
 		 */
 		int addGame(std::string gameInfo);
 
-		/**
-		 * @brief This scans the whole filesystem starting from the root folder. Checks all found games for metadata and
-		 * adds them to the Databases.
-		 *
-		 * @return Returns a positive integer if scan was sucessfully started.
-		 */
-		int scanThread();
-
-		/**
-		 * @brief This scans the whole filesystem starting from the root folder. Checks newly found games for metadata
-		 * and adds them to the Databases.
-		 *
-		 * @return Returns a positive integer if scan was sucessfully finished.
-		 */
-		int rescanThread();
-
 		// It would not really make sense to assign and copy the library manager
 		LibraryManager(const LibraryManager& other) = delete;
 		LibraryManager& operator=(LibraryManager& other) = delete;
 
 	public:
+		/**
+		 * @brief Abstracts the gamedatabase API to be more readable. Use this to retrieve information from the
+		 * database. Note that changes in the filesystem will only be applied to the database after scanning.
+		 */
 		Games games;
 
 		/**
@@ -103,22 +85,6 @@ namespace mogli::lib {
 		 * @param database the database implementation to store games into.
 		 */
 		LibraryManager(LibMgrConfig config, IGameDatabase& database);
-
-		/**
-		 * @brief This scans the whole filesystem starting from the root folder. Checks all found games for metadata and
-		 * adds them to the Databases. This function is threaded.
-		 *
-		 * @return Returns a positive integer if scan was sucessfully started.
-		 */
-		int scan();
-
-		/**
-		 * @brief This scans the whole filesystem starting from the root folder. Checks newly found games for metadata
-		 * and adds them to the Databases. This function is threaded.
-		 *
-		 * @return Returns a positive integer if scan was sucessfully finished.
-		 */
-		int rescan();
 
 		/**
 		 * Overrides the Metadata for a single game.

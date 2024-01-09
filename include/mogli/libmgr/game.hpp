@@ -1,14 +1,22 @@
+#pragma once
+
+#include <filesystem>
+#include <map>
 #include <optional>
 #include <string>
 #include <vector>
 
 namespace mogli::lib {
-	using GameID = std::string;
+	using GameID = int;
+
+	constexpr GameID InvalidGameID = -1;
 
 	struct Game final {
 		GameID id;
-		std::optional<std::string> title;
+		std::filesystem::path path;
+		std::string title;
 		std::optional<std::string> description;
 		std::vector<std::string> tags;
+		std::map<std::string, std::filesystem::path> media;
 	};
-};
+}; // namespace mogli::lib
