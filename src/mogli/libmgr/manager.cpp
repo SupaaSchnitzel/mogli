@@ -56,12 +56,11 @@ Iterable<Game> Games::all() const noexcept {
 }
 
 LibraryManager::LibraryManager(LibMgrConfig config, IGameDatabase& database)
-		: logger(mogli::log::getLogger("Library")), config(config), database(database), games(*this) {
+		: logger(mogli::log::getLogger("Library")), config(config), database(database), scanner(*this), games(*this) {
 	logger->info("Initializing Library Manager");
 }
 
-std::string LibraryManager::getGameMetadata(GameID gameTitle) { throw std::runtime_error("Not implemented"); }
-
-int LibraryManager::addGame(std::string gameInfo) { throw std::runtime_error("Not implemented"); }
-
-int LibraryManager::setGameMetadata(std::string url, GameID game) { throw std::runtime_error("Not implemented"); }
+void LibraryManager::scanAll() const noexcept {
+	/** \todo remove hardcoded, use config **/
+	scanner.scan("/workspaces/mogli/tests/testfiles/media/example-media");
+}

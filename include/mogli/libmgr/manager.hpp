@@ -26,7 +26,7 @@ namespace mogli::lib {
 		friend LibraryManager;
 
 	private:
-		LibraryManager& libmgr;
+		const LibraryManager& libmgr;
 
 		Games(LibraryManager& libmgr) noexcept;
 
@@ -51,20 +51,8 @@ namespace mogli::lib {
 	private:
 		mogli::log::LoggerPtr logger; /**< The logger the library manager should write to. **/
 		IGameDatabase& database;	  /**< The concrete mogli game database to use. **/
-		LibMgrConfig config;		  /**< The config of the library manager. **/
-
-		/**
-		 * @brief Queries the gamedb specified in the config and returns the metadata for the given gameTitle.
-		 *
-		 * @param gameTitle Title of the game
-		 * @return Returns a string formatted as json of the game Metadata
-		 */
-		std::string getGameMetadata(GameID gameTitle);
-
-		/**
-		 * @brief Adds a game into the mogli gamedb.
-		 */
-		int addGame(std::string gameInfo);
+		const LibMgrConfig config;	  /**< The config of the library manager. **/
+		const Scanner scanner;
 
 		// It would not really make sense to assign and copy the library manager
 		LibraryManager(const LibraryManager& other) = delete;
@@ -86,14 +74,6 @@ namespace mogli::lib {
 		 */
 		LibraryManager(LibMgrConfig config, IGameDatabase& database);
 
-		/**
-		 * Overrides the Metadata for a single game.
-		 *
-		 * @param url The url of the new game data (can only be steam or gog for now).
-		 * @param game The game for which the data will be changed.
-		 *
-		 * @return Returns a positive integer if Metadata was succesfully fetched and set.
-		 */
-		int setGameMetadata(std::string url, GameID game);
+		void scanAll() const noexcept;
 	};
 } // namespace mogli::lib
