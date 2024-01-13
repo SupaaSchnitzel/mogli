@@ -8,4 +8,11 @@
         "build/": true
     },
     "C_Cpp.autoAddFileAssociations": false,
+    "c-cpp-flylint.cppcheck.extraArgs": [
+        "--enable=all"
+    ],
+    "c-cpp-flylint.clang.enable": false,
+    "c-cpp-flylint.flexelint.enable": false,
+    "c-cpp-flylint.lizard.enable": false,
+    "c-cpp-flylint.clang.blocks": false,
 }
