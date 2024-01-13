@@ -19,7 +19,7 @@ void sigintHandler(int signal) {
 	endpoint->stop();
 }
 
-struct RunAppArgs {
+struct LoggerConf {
 	bool quiet = false;
 	/**
 	 * @brief Sets the verbosity of the logger. Per default (verbosity=0) only critical, error and warnings are printed.
@@ -29,9 +29,6 @@ struct RunAppArgs {
 	 *  - 3+: trace and above is printed
 	 */
 	int verbosity = 0;
-	mogli::lib::LibMgrConfig libConf;
-	mogli::rest::RESTConfig restConf;
-	mogli::lib::DBConfig dbConf;
 
 	mogli::log::Verbosity getVerbosity() const noexcept {
 		if (quiet)
@@ -42,12 +39,21 @@ struct RunAppArgs {
 	}
 };
 
-struct ScanAppArgs {
-	std::filesystem::path mediaRoot;
+struct RunAppArgs final {
+	LoggerConf logConf;
+	mogli::lib::LibMgrConfig libConf;
+	mogli::rest::RESTConfig restConf;
+	mogli::lib::DBConfig dbConf;
+};
+
+struct ScanAppArgs final {
+	LoggerConf logConf;
+	mogli::lib::LibMgrConfig libConf;
+	mogli::lib::DBConfig dbConf;
 };
 
 static void runRunCommand(const RunAppArgs args) {
-	mogli::log::setVerbosity(args.getVerbosity());
+	mogli::log::setVerbosity(args.logConf.getVerbosity());
 	auto logger = mogli::log::getLogger("Mogli");
 	logger->info("Launching mogli v.{}", mogli::version);
 	auto database = mogli::lib::createPostgreSQLConnector();
@@ -77,8 +83,67 @@ static void runRunCommand(const RunAppArgs args) {
 }
 
 static void runScanCommand(const ScanAppArgs args) {
-	/** \todo implement **/
-	throw std::runtime_error("Not yet implemented");
+	mogli::log::setVerbosity(args.logConf.getVerbosity());
+	auto logger = mogli::log::getLogger("Mogli");
+	logger->info("Launching mogli v.{}", mogli::version);
+	auto database = mogli::lib::createPostgreSQLConnector();
+	auto dbError = database->setup(args.dbConf);
+	if (dbError == mogli::lib::IGameDatabase::Success) {
+		mogli::lib::LibraryManager libmgr(args.libConf, *database);
+		libmgr.scanAll();
+		database->teardown();
+	} else {
+		logger->critical("Failed to setup database: {}", database->getErrorMessage(dbError));
+	}
+	logger->info("Exited");
+}
+
+void setupLoggerArgs(CLI::App& app, LoggerConf& conf) {
+	app.add_flag(
+			"-v,--verbose", conf.verbosity,
+			"Sets the logger's verbosity. Passing it multiple times increases verbosity."
+	);
+	app.add_flag("-q,--quiet", conf.quiet, "Supresses all outputs");
+}
+
+void setupLibMgrArgs(CLI::App& app, mogli::lib::LibMgrConfig& conf) {
+	app.add_option("--media", conf.root, "The root directory of all media")
+			->configurable(true)
+			->envname("MOGLI_MEDIA_ROOT_DIR");
+}
+
+void setupRESTArgs(CLI::App& app, mogli::rest::RESTConfig& conf) {
+	app.add_option("--host", conf.host, "The host to bind the REST-server to")
+			->default_val("localhost")
+			->configurable(true)
+			->envname("MOGLI_REST_HOST");
+	app.add_option("--port", conf.port, "The port used by the REST-server")
+			->default_val(8000)
+			->configurable(true)
+			->envname("MOGLI_REST_PORT");
+	app.add_flag("--ipv4", conf.useIPv4, "Use IPv4 for the REST-server")
+			->default_val(true)
+			->configurable(true)
+			->envname("MOGLI_REST_IPV4");
+}
+
+void setupDBArgs(CLI::App& app, mogli::lib::DBConfig& conf) {
+	app.add_option("--dbhost", conf.host, "The database host to connect to")
+			->configurable(true)
+			->envname("MOGLI_DB_HOST");
+	app.add_option("--dbport", conf.port, "The database port to connect to")
+			->default_val(5432)
+			->configurable(true)
+			->envname("MOGLI_DB_PORT");
+	app.add_option("--dbname", conf.dbname, "The name of the database")
+			->configurable(true)
+			->envname("MOGLI_DB_NAME");
+	app.add_option("--dbuser", conf.username, "The database user account to log into")
+			->configurable(true)
+			->envname("MOGLI_DB_USER");
+	app.add_option("--dbpassword", conf.password, "The database user password to log in with")
+			->configurable(true)
+			->envname("MOGLI_DB_PASSWORD");
 }
 
 const std::string mogliVersion = std::format("mogli v.{}", mogli::version);
@@ -86,6 +151,21 @@ const std::string cliVersion = "CLI11 v." CLI11_VERSION;
 const std::string timestamp = "Commit " GIT_COMMIT_HASH;
 
 int main(int argc, char* argv[]) {
+	/** Proof of concept: auth with gog **/
+	/*auto redirectUri = "https%3A%2F%2Fembed.gog.com%2Fon_login_success%3Forigin%3Dclient";
+	auto clientId = "46899977096215655";
+	auto authUrl = std::format("https://auth.gog.com/auth?client_id={}&redirect_uri={}&response_type=code&layout=client2", clientId, redirectUri);
+	std::cout << "open this in your browser:\n" << authUrl << std::endl;
+	std::string code;
+	//std::cout << "Enter code from response: " << std::flush;
+	//std::cin >> code;
+	code = "6repviKupxwMkunk5EAIL7hqRPHuBzBfzrKtIiYXH_G8UUqkgHr2h9ufYk5MiXl5_JizCHYMeRApCe_dzZeXGl0_9N1d6z0p-rAkUbPeUBkGv1IlYgoTeCHllrzJAhCm5ONkDRNOkaA9UvUvUAeJ_yJdyTXLfhe5SS88FEmXuXu4-q3LgBeAaikyW7QakcNp";
+*/
+
+	//return 0;
+
+
+
 	/** \todo Maybe add a better description of the app. **/
 	CLI::App app("Manage your own game library.");
 	std::vector<std::string> libs{
@@ -98,51 +178,19 @@ int main(int argc, char* argv[]) {
 	RunAppArgs runArgs;
 	CLI::App& runApp = *app.add_subcommand("run", "Runs the mogli REST-server and library manager");
 	runApp.set_config("-c,--config");
-	runApp.add_flag(
-			"-v,--verbose", runArgs.verbosity,
-			"Sets the logger's verbosity. Passing it multiple times increases verbosity."
-	);
-	runApp.add_flag("-q,--quiet", runArgs.quiet, "Supresses all outputs");
-	runApp.add_option("--media", runArgs.libConf.root, "The root directory of all media")
-			->configurable(true)
-			->envname("MOGLI_MEDIA_ROOT_DIR");
-	runApp.add_option("--host", runArgs.restConf.host, "The host to bind the REST-server to")
-			->default_val("localhost")
-			->configurable(true)
-			->envname("MOGLI_REST_HOST");
-	runApp.add_option("--port", runArgs.restConf.port, "The port used by the REST-server")
-			->default_val(8000)
-			->configurable(true)
-			->envname("MOGLI_REST_PORT");
-	runApp.add_flag("--ipv4", runArgs.restConf.useIPv4, "Use IPv4 for the REST-server")
-			->default_val(true)
-			->configurable(true)
-			->envname("MOGLI_REST_IPV4");
-	runApp.add_option("--dbhost", runArgs.dbConf.host, "The database host to connect to")
-			->configurable(true)
-			->envname("MOGLI_DB_HOST");
-	runApp.add_option("--dbport", runArgs.dbConf.port, "The database port to connect to")
-			->default_val(5432)
-			->configurable(true)
-			->envname("MOGLI_DB_PORT");
-	runApp.add_option("--dbname", runArgs.dbConf.dbname, "The name of the database")
-			->configurable(true)
-			->envname("MOGLI_DB_NAME");
-	runApp.add_option("--dbuser", runArgs.dbConf.username, "The database user account to log into")
-			->configurable(true)
-			->envname("MOGLI_DB_USER");
-	runApp.add_option("--dbpassword", runArgs.dbConf.password, "The database user password to log in with")
-			->configurable(true)
-			->envname("MOGLI_DB_PASSWORD");
+	setupLoggerArgs(runApp, runArgs.logConf);
+	setupLibMgrArgs(runApp, runArgs.libConf);
+	setupRESTArgs(runApp, runArgs.restConf);
+	setupDBArgs(runApp, runArgs.dbConf);
 	runApp.callback({[&runArgs]() { runRunCommand(runArgs); }});
 
 	// Scan Command
 	ScanAppArgs scanArgs;
 	CLI::App& scanApp = *app.add_subcommand("scan", "Scans mogli's libraries and updates the database accordingly");
 	scanApp.set_config("-c,--config");
-	scanApp.add_option("--media", scanArgs.mediaRoot, "The root directory of all media")
-			->configurable(true)
-			->envname("MEDIA_ROOT_DIR");
+	setupLoggerArgs(scanApp, scanArgs.logConf);
+	setupLibMgrArgs(scanApp, scanArgs.libConf);
+	setupDBArgs(scanApp, scanArgs.dbConf);
 	scanApp.callback({[&scanArgs]() { runScanCommand(scanArgs); }});
 
 	CLI11_PARSE(app, argc, argv);
