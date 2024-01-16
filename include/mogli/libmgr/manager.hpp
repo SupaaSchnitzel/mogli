@@ -74,6 +74,6 @@ namespace mogli::lib {
 		 */
 		LibraryManager(LibMgrConfig config, IGameDatabase& database);
 
-		void scanAll() const noexcept;
+		void scanAll(bool dryrun = false) const noexcept;
 	};
 } // namespace mogli::lib

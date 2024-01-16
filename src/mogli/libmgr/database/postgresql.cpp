@@ -163,13 +163,13 @@ public:
 			soci::session session(pool);
 			soci::transaction transaction(session);
 			session << "INSERT INTO games(title, description, path) VALUES (:title, :description, :path) RETURNING id",
-					soci::use(entry.title), soci::use(entry.description), soci::use(entry.path), soci::into(entry.id);
+					soci::use(entry.title, "title"), soci::use(entry.description, "description"), soci::use(entry.path, "path"), soci::into(entry.id);
 			/** \todo implement adding tags **/
 			/** \todo I don't like to have to copy the gameid here but views (like, e.g., std::views::repeat) don't seem
 			 * to be supported by soci :(; Maybe this can be changed in the future. **/
-			std::vector<std::reference_wrapper<GameID>> gameids(entry.tags.size(), entry.id);
-			session << "INSERT INTO tags(gameid, tag) VALUES (:gameid, :tag)", soci::use(gameids),
-					soci::use(entry.tags);
+			/*std::vector<std::reference_wrapper<GameID>> gameids(entry.tags.size(), entry.id);
+			session << "INSERT INTO tags(gameid, tag) VALUES (:gameid, :tag)", soci::use(gameids, "gameid"),
+					soci::use(entry.tags, "tag");*/
 			transaction.commit();
 			logger->info("Created new game with id {}", entry.id);
 			return ErrorCodes::genericError;
@@ -228,10 +228,11 @@ public:
 	ErrorCode getGame(std::filesystem::path path, GameDBEntry& entry) noexcept override {
 		try {
 			soci::session session(pool);
+			entry.id = InvalidGameID;
 			session << "SELECT id, title, description, path, last_updated FROM games WHERE path=:path",
 					soci::into(entry.id), soci::into(entry.title), soci::into(entry.description),
 					soci::into(entry.path), soci::into(entry.lastUpdated), soci::use(path);
-			return ErrorCodes::success;
+			return entry.id == InvalidGameID ? ErrorCodes::noSuchGame : ErrorCodes::success;
 		} catch (soci::soci_error& e) {
 			logger->error(
 					"Failed to fetch game by path {} [{}]: {}", path.c_str(), (int)e.get_error_category(),

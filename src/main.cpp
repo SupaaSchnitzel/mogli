@@ -50,6 +50,7 @@ struct ScanAppArgs final {
 	LoggerConf logConf;
 	mogli::lib::LibMgrConfig libConf;
 	mogli::lib::DBConfig dbConf;
+	bool dryrun = false; /**< true iff the scanner should only log what it would do instead of actually modifying the database **/
 };
 
 static void runRunCommand(const RunAppArgs args) {
@@ -90,7 +91,7 @@ static void runScanCommand(const ScanAppArgs args) {
 	auto dbError = database->setup(args.dbConf);
 	if (dbError == mogli::lib::IGameDatabase::Success) {
 		mogli::lib::LibraryManager libmgr(args.libConf, *database);
-		libmgr.scanAll();
+		libmgr.scanAll(args.dryrun);
 		database->teardown();
 	} else {
 		logger->critical("Failed to setup database: {}", database->getErrorMessage(dbError));
@@ -151,21 +152,6 @@ const std::string cliVersion = "CLI11 v." CLI11_VERSION;
 const std::string timestamp = "Commit " GIT_COMMIT_HASH;
 
 int main(int argc, char* argv[]) {
-	/** Proof of concept: auth with gog **/
-	/*auto redirectUri = "https%3A%2F%2Fembed.gog.com%2Fon_login_success%3Forigin%3Dclient";
-	auto clientId = "46899977096215655";
-	auto authUrl = std::format("https://auth.gog.com/auth?client_id={}&redirect_uri={}&response_type=code&layout=client2", clientId, redirectUri);
-	std::cout << "open this in your browser:\n" << authUrl << std::endl;
-	std::string code;
-	//std::cout << "Enter code from response: " << std::flush;
-	//std::cin >> code;
-	code = "6repviKupxwMkunk5EAIL7hqRPHuBzBfzrKtIiYXH_G8UUqkgHr2h9ufYk5MiXl5_JizCHYMeRApCe_dzZeXGl0_9N1d6z0p-rAkUbPeUBkGv1IlYgoTeCHllrzJAhCm5ONkDRNOkaA9UvUvUAeJ_yJdyTXLfhe5SS88FEmXuXu4-q3LgBeAaikyW7QakcNp";
-*/
-
-	//return 0;
-
-
-
 	/** \todo Maybe add a better description of the app. **/
 	CLI::App app("Manage your own game library.");
 	std::vector<std::string> libs{
@@ -188,6 +174,7 @@ int main(int argc, char* argv[]) {
 	ScanAppArgs scanArgs;
 	CLI::App& scanApp = *app.add_subcommand("scan", "Scans mogli's libraries and updates the database accordingly");
 	scanApp.set_config("-c,--config");
+	scanApp.add_flag("--dryrun", scanArgs.dryrun, "If set, the database will not be modified");
 	setupLoggerArgs(scanApp, scanArgs.logConf);
 	setupLibMgrArgs(scanApp, scanArgs.libConf);
 	setupDBArgs(scanApp, scanArgs.dbConf);

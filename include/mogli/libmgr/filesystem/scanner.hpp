@@ -24,7 +24,7 @@ namespace mogli::lib {
 
 		void merge() const noexcept;
 	public:
-		void scan(std::filesystem::path path) const noexcept;
+		void scan(std::filesystem::path path, bool dryrun = false) const noexcept;
 		void scanSingle(const GameEntry& game) const noexcept;
 	};
 

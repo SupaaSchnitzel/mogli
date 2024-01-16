@@ -34,7 +34,7 @@
             "request": "launch",
             // Resolved by CMake Tools:
             "program": "${command:cmake.launchTargetPath}",
-            "args": [ "scan", "-vvv" ],
+            "args": [ "scan", "-vvv", "--dryrun" ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [

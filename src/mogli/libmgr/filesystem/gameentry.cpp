@@ -159,6 +159,10 @@ std::optional<std::vector<T>> GameEntry::getInfoSeqEntry(std::vector<std::string
 	return std::make_optional(vec);
 }
 
+std::filesystem::path GameEntry::getPath() const noexcept {
+	return entry.path();
+}
+
 std::string GameEntry::getName() const noexcept {
 	if (auto title = getInfoEntry<std::string>({"title"}); title.has_value())
 		return title.value();
@@ -173,6 +177,10 @@ std::string GameEntry::getName() const noexcept {
 	const auto isspace = [](char c) { return std::isspace(static_cast<unsigned char>(c)); };
 	end = std::find_if_not(std::make_reverse_iterator(end), name.rend(), isspace).base();
 	return std::string(name.begin(), end);
+}
+
+std::optional<std::string> GameEntry::getDescription() const noexcept {
+	return getInfoEntry<std::string>({"description"});
 }
 
 /** \todo stoi and the like my not be ideal since they throw exceptions. Instead a function of the signature

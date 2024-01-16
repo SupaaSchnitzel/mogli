@@ -17,9 +17,9 @@ static Game toGame(GameDBEntry entry) {
 	auto globalpath = std::filesystem::path("/workspaces/mogli/tests/testfiles/media") / entry.path;
 	GameEntry file{std::filesystem::directory_entry(globalpath)};
 	auto addToMedia = [&media](std::string name) { return [&media, name](auto path) { return media[name] = path; }; };
-	file.getLogo().transform(addToMedia("logo"));
-	file.getBanner().transform(addToMedia("banner"));
-	file.getBoxart().transform(addToMedia("boxart"));
+	file.getLogo().transform(addToMedia(Game::MediaKeyLogo));
+	file.getBanner().transform(addToMedia(Game::MediaKeyBanner));
+	file.getBoxart().transform(addToMedia(Game::MediaKeyBoxart));
 	return Game{
 			.id = entry.id,
 			.path = globalpath,
@@ -60,7 +60,7 @@ LibraryManager::LibraryManager(LibMgrConfig config, IGameDatabase& database)
 	logger->info("Initializing Library Manager");
 }
 
-void LibraryManager::scanAll() const noexcept {
+void LibraryManager::scanAll(bool dryrun) const noexcept {
 	/** \todo remove hardcoded, use config **/
-	scanner.scan("/workspaces/mogli/tests/testfiles/media/example-media");
+	scanner.scan("/workspaces/mogli/tests/testfiles/media/example-media", dryrun);
 }

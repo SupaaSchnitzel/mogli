@@ -62,6 +62,13 @@ namespace mogli::lib {
 		explicit GameEntry(std::filesystem::directory_entry entry);
 
 		/**
+		 * @brief Returns the path this game is located at.
+		 * 
+		 * @return The path this game is located at.
+		 */
+		std::filesystem::path getPath() const noexcept;
+
+		/**
 		 * @brief Returns the name of the game as it is inferred from the file name.
 		 * @details Returns the name of the game as it is inferred from the file name. The game's name is the initial
 		 * substring that does not consist of the release year or any hints.
@@ -73,6 +80,13 @@ namespace mogli::lib {
 		 * @note getName() is the only exception where the info.yaml takes precedence over the filename.
 		 */
 		std::string getName() const noexcept;
+
+		/**
+		 * @brief Get the game's description as it is inferred from the folder's content.
+		 * 
+		 * @return The game's description or an empty optional if it could not be inferred.
+		 */
+		std::optional<std::string> getDescription() const noexcept;
 
 		/**
 		 * @brief Returns the year of the game's release as it is inferred from the file name.
