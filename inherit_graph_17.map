@@ -1,0 +1,4 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classmogli_1_1utils_1_1GenericIterator_1_1AIter.html" title="The &quot;abstract iterator&quot; (AIter) provides a class interface for forward iterators (i...." alt="" coords="5,5,207,47"/>
+<area shape="rect" id="node2" href="$classmogli_1_1utils_1_1GenericIterator_1_1Iter.html" title="The Iter class wraps objects that suffice the std::input_or_output_iterator concept to implement the ..." alt="" coords="255,5,456,47"/>
+</map>

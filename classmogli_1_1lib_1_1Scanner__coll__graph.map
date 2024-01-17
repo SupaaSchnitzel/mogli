@@ -1,0 +1,8 @@
+<map id="mogli::lib::Scanner" name="mogli::lib::Scanner">
+<area shape="rect" id="node1" title=" " alt="" coords="426,109,569,136"/>
+<area shape="rect" id="node2" href="$classmogli_1_1lib_1_1LibraryManager.html" title="The library manager is responsible for synching the database and filesystem and provides and interfac..." alt="" coords="314,199,507,225"/>
+<area shape="rect" id="node6" href="$structmogli_1_1lib_1_1Games.html" title="Abstraction layer around the game database for a more readable API." alt="" coords="342,288,479,315"/>
+<area shape="rect" id="node3" href="$structmogli_1_1lib_1_1LibMgrConfig.html" title="Contains the library manager configuration options." alt="" coords="5,109,181,136"/>
+<area shape="rect" id="node4" href="$classmogli_1_1lib_1_1IGameDatabase.html" title="The generic game database interface." alt="" coords="206,109,402,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="469,5,646,47"/>
+</map>

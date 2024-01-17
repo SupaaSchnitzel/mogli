@@ -1,0 +1,17 @@
+<map id="mogli::rest::RESTEndpoint" name="mogli::rest::RESTEndpoint">
+<area shape="rect" id="node1" title="RESTEndpoint implements a server that provides the REST&#45;API interface to external tools." alt="" coords="900,323,1091,349"/>
+<area shape="rect" id="node2" href="$structmogli_1_1rest_1_1RESTConfig.html" title="Contains configuration options for the REST&#45;endpoint." alt="" coords="526,297,699,324"/>
+<area shape="rect" id="node3" title=" " alt="" coords="248,297,335,324"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,290,144,331"/>
+<area shape="rect" id="node5" title=" " alt="" coords="503,348,723,375"/>
+<area shape="rect" id="node6" href="$classmogli_1_1lib_1_1LibraryManager.html" title="The library manager is responsible for synching the database and filesystem and provides and interfac..." alt="" coords="516,100,709,127"/>
+<area shape="rect" id="node7" href="$classmogli_1_1lib_1_1Scanner.html" title=" " alt="" coords="924,20,1067,47"/>
+<area shape="rect" id="node11" href="$structmogli_1_1lib_1_1Games.html" title="Abstraction layer around the game database for a more readable API." alt="" coords="927,133,1064,160"/>
+<area shape="rect" id="node8" title=" " alt="" coords="203,18,380,59"/>
+<area shape="rect" id="node9" href="$structmogli_1_1lib_1_1LibMgrConfig.html" title="Contains the library manager configuration options." alt="" coords="203,95,379,121"/>
+<area shape="rect" id="node10" href="$classmogli_1_1lib_1_1IGameDatabase.html" title="The generic game database interface." alt="" coords="193,145,389,172"/>
+<area shape="rect" id="node12" title=" " alt="" coords="534,399,691,425"/>
+<area shape="rect" id="node13" title=" " alt="" coords="272,399,311,425"/>
+<area shape="rect" id="node14" title=" " alt="" coords="517,449,708,476"/>
+<area shape="rect" id="node15" title=" " alt="" coords="509,231,716,273"/>
+</map>

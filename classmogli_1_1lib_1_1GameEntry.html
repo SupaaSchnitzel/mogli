@@ -1,0 +1,905 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>mogli: mogli::lib::GameEntry Class Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/jothepro/doxygen-awesome-css" class="github-corner" title="View source on GitHub" target="_blank">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="icon.svg"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">mogli
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('classmogli_1_1lib_1_1GameEntry.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="classmogli_1_1lib_1_1GameEntry-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">mogli::lib::GameEntry Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>The <a class="el" href="classmogli_1_1lib_1_1GameEntry.html" title="The GameEntry class abstracts a folder containing user provided information on a game.">GameEntry</a> class abstracts a folder containing user provided information on a game.  
+ <a href="classmogli_1_1lib_1_1GameEntry.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="gameentry_8hpp_source.html">mogli/libmgr/filesystem/gameentry.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for mogli::lib::GameEntry:</div>
+<div class="dyncontent">
+<div class="center"><img src="classmogli_1_1lib_1_1GameEntry__coll__graph.png" border="0" usemap="#amogli_1_1lib_1_1GameEntry_coll__map" alt="Collaboration graph"/></div>
+<map name="amogli_1_1lib_1_1GameEntry_coll__map" id="amogli_1_1lib_1_1GameEntry_coll__map">
+<area shape="rect" title="The GameEntry class abstracts a folder containing user provided information on a game." alt="" coords="12,109,176,136"/>
+<area shape="rect" title=" " alt="" coords="5,5,183,47"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a172c5606797f16797dc334e21cd85ab1"><td class="memItemLeft" align="right" valign="top"><a id="a172c5606797f16797dc334e21cd85ab1"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>path_or_url</b> = std::variant&lt; std::filesystem::path, std::string &gt;</td></tr>
+<tr class="separator:a172c5606797f16797dc334e21cd85ab1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a5c1f03ec86e64060486baa4c6edc151a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a5c1f03ec86e64060486baa4c6edc151a">GameEntry</a> (std::filesystem::directory_entry <a class="el" href="classmogli_1_1lib_1_1GameEntry.html#ac0a5eeeb2148c39ce53559f254a4c9ef">entry</a>)</td></tr>
+<tr class="memdesc:a5c1f03ec86e64060486baa4c6edc151a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classmogli_1_1lib_1_1GameEntry.html" title="The GameEntry class abstracts a folder containing user provided information on a game.">GameEntry</a> object that is associated with the provided directory.  <a href="classmogli_1_1lib_1_1GameEntry.html#a5c1f03ec86e64060486baa4c6edc151a">More...</a><br /></td></tr>
+<tr class="separator:a5c1f03ec86e64060486baa4c6edc151a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2503ce8ce21265a4d0c126e3da650ae"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#ac2503ce8ce21265a4d0c126e3da650ae">getPath</a> () const noexcept</td></tr>
+<tr class="memdesc:ac2503ce8ce21265a4d0c126e3da650ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the path this game is located at.  <a href="classmogli_1_1lib_1_1GameEntry.html#ac2503ce8ce21265a4d0c126e3da650ae">More...</a><br /></td></tr>
+<tr class="separator:ac2503ce8ce21265a4d0c126e3da650ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefbb9b539e542bfe8b689bdd82e88b6b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#aefbb9b539e542bfe8b689bdd82e88b6b">getName</a> () const noexcept</td></tr>
+<tr class="memdesc:aefbb9b539e542bfe8b689bdd82e88b6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the game as it is inferred from the file name.  <a href="classmogli_1_1lib_1_1GameEntry.html#aefbb9b539e542bfe8b689bdd82e88b6b">More...</a><br /></td></tr>
+<tr class="separator:aefbb9b539e542bfe8b689bdd82e88b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4de3429a2fde7dacfbce760109a324d4"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a4de3429a2fde7dacfbce760109a324d4">getDescription</a> () const noexcept</td></tr>
+<tr class="memdesc:a4de3429a2fde7dacfbce760109a324d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the game's description as it is inferred from the folder's content.  <a href="classmogli_1_1lib_1_1GameEntry.html#a4de3429a2fde7dacfbce760109a324d4">More...</a><br /></td></tr>
+<tr class="separator:a4de3429a2fde7dacfbce760109a324d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc4d9e0c5b3cd867fcb4613b71a2fdf7"><td class="memItemLeft" align="right" valign="top">std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#afc4d9e0c5b3cd867fcb4613b71a2fdf7">getReleaseYear</a> () const noexcept</td></tr>
+<tr class="memdesc:afc4d9e0c5b3cd867fcb4613b71a2fdf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the year of the game's release as it is inferred from the file name.  <a href="classmogli_1_1lib_1_1GameEntry.html#afc4d9e0c5b3cd867fcb4613b71a2fdf7">More...</a><br /></td></tr>
+<tr class="separator:afc4d9e0c5b3cd867fcb4613b71a2fdf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcfcade7b9d687c5cde5a79e624735ed"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#abcfcade7b9d687c5cde5a79e624735ed">getHint</a> (std::string key) const noexcept</td></tr>
+<tr class="memdesc:abcfcade7b9d687c5cde5a79e624735ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts the specified hint from the filename and returns it. If the hint was not present, an empty optional is returned instead.  <a href="classmogli_1_1lib_1_1GameEntry.html#abcfcade7b9d687c5cde5a79e624735ed">More...</a><br /></td></tr>
+<tr class="separator:abcfcade7b9d687c5cde5a79e624735ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5a13ef71af024ce63e0233b18b395b7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#aa5a13ef71af024ce63e0233b18b395b7">getTags</a> () const noexcept</td></tr>
+<tr class="memdesc:aa5a13ef71af024ce63e0233b18b395b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tags (keywords) associated with the game. These are read from the yaml file.  <a href="classmogli_1_1lib_1_1GameEntry.html#aa5a13ef71af024ce63e0233b18b395b7">More...</a><br /></td></tr>
+<tr class="separator:aa5a13ef71af024ce63e0233b18b395b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a946e2cd1bf4aa7b93f6f33f160d6d4d3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a946e2cd1bf4aa7b93f6f33f160d6d4d3">getDeveloper</a> () const noexcept</td></tr>
+<tr class="memdesc:a946e2cd1bf4aa7b93f6f33f160d6d4d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the developer of the game as it is specified in the yaml file.  <a href="classmogli_1_1lib_1_1GameEntry.html#a946e2cd1bf4aa7b93f6f33f160d6d4d3">More...</a><br /></td></tr>
+<tr class="separator:a946e2cd1bf4aa7b93f6f33f160d6d4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53693ab5fbc3f47968d0ed56ffc763e6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a53693ab5fbc3f47968d0ed56ffc763e6">getPublisher</a> () const noexcept</td></tr>
+<tr class="memdesc:a53693ab5fbc3f47968d0ed56ffc763e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the publisher of the game as it is specified in the yaml file.  <a href="classmogli_1_1lib_1_1GameEntry.html#a53693ab5fbc3f47968d0ed56ffc763e6">More...</a><br /></td></tr>
+<tr class="separator:a53693ab5fbc3f47968d0ed56ffc763e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8d47c95559fe4f9789f2bbf035d144b"><td class="memItemLeft" align="right" valign="top">std::optional&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#ad8d47c95559fe4f9789f2bbf035d144b">getRating</a> () const noexcept</td></tr>
+<tr class="memdesc:ad8d47c95559fe4f9789f2bbf035d144b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the rating of the game as it is specified in the yaml file.  <a href="classmogli_1_1lib_1_1GameEntry.html#ad8d47c95559fe4f9789f2bbf035d144b">More...</a><br /></td></tr>
+<tr class="separator:ad8d47c95559fe4f9789f2bbf035d144b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ab5f5c4016b7971b4c82868b135e742"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::filesystem::directory_entry &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a7ab5f5c4016b7971b4c82868b135e742">getLogo</a> () const noexcept</td></tr>
+<tr class="memdesc:a7ab5f5c4016b7971b4c82868b135e742"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the path to the logo if it exists.  <a href="classmogli_1_1lib_1_1GameEntry.html#a7ab5f5c4016b7971b4c82868b135e742">More...</a><br /></td></tr>
+<tr class="separator:a7ab5f5c4016b7971b4c82868b135e742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7aa15e29e1da59a87a845be0b21cc9fa"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::filesystem::directory_entry &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a7aa15e29e1da59a87a845be0b21cc9fa">getBanner</a> () const noexcept</td></tr>
+<tr class="memdesc:a7aa15e29e1da59a87a845be0b21cc9fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the path to the banner if it exists.  <a href="classmogli_1_1lib_1_1GameEntry.html#a7aa15e29e1da59a87a845be0b21cc9fa">More...</a><br /></td></tr>
+<tr class="separator:a7aa15e29e1da59a87a845be0b21cc9fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48c8fe995bdfca2a722857b07b3ca276"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::filesystem::directory_entry &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a48c8fe995bdfca2a722857b07b3ca276">getBoxart</a> () const noexcept</td></tr>
+<tr class="memdesc:a48c8fe995bdfca2a722857b07b3ca276"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the path to the boxart if it exists.  <a href="classmogli_1_1lib_1_1GameEntry.html#a48c8fe995bdfca2a722857b07b3ca276">More...</a><br /></td></tr>
+<tr class="separator:a48c8fe995bdfca2a722857b07b3ca276"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa881d3976933a3ed8049694e3bf5b2f9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#aa881d3976933a3ed8049694e3bf5b2f9">getScreenshots</a> () const noexcept</td></tr>
+<tr class="memdesc:aa881d3976933a3ed8049694e3bf5b2f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the paths or URLs of all the screenshots that were found for the game.  <a href="classmogli_1_1lib_1_1GameEntry.html#aa881d3976933a3ed8049694e3bf5b2f9">More...</a><br /></td></tr>
+<tr class="separator:aa881d3976933a3ed8049694e3bf5b2f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a579277018b8f93c1286ebce87ba67df3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; path_or_url &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a579277018b8f93c1286ebce87ba67df3">getTrailers</a> () const noexcept</td></tr>
+<tr class="memdesc:a579277018b8f93c1286ebce87ba67df3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the paths or URLs of all the trailers that were found for the game.  <a href="classmogli_1_1lib_1_1GameEntry.html#a579277018b8f93c1286ebce87ba67df3">More...</a><br /></td></tr>
+<tr class="separator:a579277018b8f93c1286ebce87ba67df3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a559170164959fb66609b2e38a3b9cd"><td class="memItemLeft" align="right" valign="top">std::set&lt; Platform &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a9a559170164959fb66609b2e38a3b9cd">getSupportedPlatforms</a> () const noexcept</td></tr>
+<tr class="memdesc:a9a559170164959fb66609b2e38a3b9cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the platforms for which installers were found.  <a href="classmogli_1_1lib_1_1GameEntry.html#a9a559170164959fb66609b2e38a3b9cd">More...</a><br /></td></tr>
+<tr class="separator:a9a559170164959fb66609b2e38a3b9cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6239ca279c8929eb09838f275f179458"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::filesystem::directory_entry &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a6239ca279c8929eb09838f275f179458">getInstallerFiles</a> (Platform platform) const noexcept</td></tr>
+<tr class="memdesc:a6239ca279c8929eb09838f275f179458"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the installer files for the specified platform. If none were found, an empty vector is returned.  <a href="classmogli_1_1lib_1_1GameEntry.html#a6239ca279c8929eb09838f275f179458">More...</a><br /></td></tr>
+<tr class="separator:a6239ca279c8929eb09838f275f179458"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a080a0391dd0d711ed668f1c8a625458e"><td class="memItemLeft" align="right" valign="top"><a id="a080a0391dd0d711ed668f1c8a625458e"></a>
+constexpr static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a080a0391dd0d711ed668f1c8a625458e">maxRating</a> = 5.f</td></tr>
+<tr class="memdesc:a080a0391dd0d711ed668f1c8a625458e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The highest possible rating. <br /></td></tr>
+<tr class="separator:a080a0391dd0d711ed668f1c8a625458e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a68943002c7121db441286145a6547954"><td class="memItemLeft" align="right" valign="top">std::optional&lt; ryml::ConstNodeRef &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a68943002c7121db441286145a6547954">getInfoEntryNode</a> (std::vector&lt; std::string &gt; path) const noexcept</td></tr>
+<tr class="memdesc:a68943002c7121db441286145a6547954"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the yaml tree node associated with the provided path. If the path does not exist, empty is returned.  <a href="classmogli_1_1lib_1_1GameEntry.html#a68943002c7121db441286145a6547954">More...</a><br /></td></tr>
+<tr class="separator:a68943002c7121db441286145a6547954"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab299bb24092ff4b507ef7c1f6627ed81"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ab299bb24092ff4b507ef7c1f6627ed81"><td class="memTemplItemLeft" align="right" valign="top">std::optional&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#ab299bb24092ff4b507ef7c1f6627ed81">getInfoEntry</a> (std::vector&lt; std::string &gt; path) const noexcept</td></tr>
+<tr class="memdesc:ab299bb24092ff4b507ef7c1f6627ed81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a key from the info.yml file describing metadata of this game entry.  <a href="classmogli_1_1lib_1_1GameEntry.html#ab299bb24092ff4b507ef7c1f6627ed81">More...</a><br /></td></tr>
+<tr class="separator:ab299bb24092ff4b507ef7c1f6627ed81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a444985546f4731ddca982eca15fc4c72"><td class="memTemplParams" colspan="2"><a id="a444985546f4731ddca982eca15fc4c72"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a444985546f4731ddca982eca15fc4c72"><td class="memTemplItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getInfoSeqEntry</b> (std::vector&lt; std::string &gt; path) const noexcept</td></tr>
+<tr class="separator:a444985546f4731ddca982eca15fc4c72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb2922042bd2f3fddf9a798adda2aa7d"><td class="memTemplParams" colspan="2"><a id="aeb2922042bd2f3fddf9a798adda2aa7d"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aeb2922042bd2f3fddf9a798adda2aa7d"><td class="memTemplItemLeft" align="right" valign="top">std::optional&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getNodeValue</b> (const ryml::ConstNodeRef &amp;node) const noexcept</td></tr>
+<tr class="separator:aeb2922042bd2f3fddf9a798adda2aa7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:aedc8db293f1c66abaee8f5d7111f8677"><td class="memItemLeft" align="right" valign="top">mogli::log::LoggerPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#aedc8db293f1c66abaee8f5d7111f8677">logger</a></td></tr>
+<tr class="separator:aedc8db293f1c66abaee8f5d7111f8677"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0a5eeeb2148c39ce53559f254a4c9ef"><td class="memItemLeft" align="right" valign="top">std::filesystem::directory_entry&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#ac0a5eeeb2148c39ce53559f254a4c9ef">entry</a></td></tr>
+<tr class="separator:ac0a5eeeb2148c39ce53559f254a4c9ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ebba94d7f1e4c44863dab985ea397d1"><td class="memItemLeft" align="right" valign="top">std::optional&lt; ryml::Tree &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a7ebba94d7f1e4c44863dab985ea397d1">yaml</a></td></tr>
+<tr class="separator:a7ebba94d7f1e4c44863dab985ea397d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The <a class="el" href="classmogli_1_1lib_1_1GameEntry.html" title="The GameEntry class abstracts a folder containing user provided information on a game.">GameEntry</a> class abstracts a folder containing user provided information on a game. </p>
+<p>The <a class="el" href="classmogli_1_1lib_1_1GameEntry.html" title="The GameEntry class abstracts a folder containing user provided information on a game.">GameEntry</a> class abstracts a folder containing user provided information on a game. The specification of the folder structure can be found <a class="el" href="md_media_filesystem.html">here</a>. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a5c1f03ec86e64060486baa4c6edc151a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c1f03ec86e64060486baa4c6edc151a">&#9670;&nbsp;</a></span>GameEntry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">mogli::lib::GameEntry::GameEntry </td>
+          <td>(</td>
+          <td class="paramtype">std::filesystem::directory_entry&#160;</td>
+          <td class="paramname"><em>entry</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classmogli_1_1lib_1_1GameEntry.html" title="The GameEntry class abstracts a folder containing user provided information on a game.">GameEntry</a> object that is associated with the provided directory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entry</td><td>The directory entry containing information regarding the game. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7aa15e29e1da59a87a845be0b21cc9fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7aa15e29e1da59a87a845be0b21cc9fa">&#9670;&nbsp;</a></span>getBanner()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;std::filesystem::directory_entry&gt; mogli::lib::GameEntry::getBanner </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the path to the banner if it exists. </p>
+<dl class="section return"><dt>Returns</dt><dd>The path to the banner or empty if it was not found. </dd></dl>
+
+</div>
+</div>
+<a id="a48c8fe995bdfca2a722857b07b3ca276"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48c8fe995bdfca2a722857b07b3ca276">&#9670;&nbsp;</a></span>getBoxart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;std::filesystem::directory_entry&gt; mogli::lib::GameEntry::getBoxart </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the path to the boxart if it exists. </p>
+<dl class="section return"><dt>Returns</dt><dd>The path to the boxart or empty if it was not found. </dd></dl>
+
+</div>
+</div>
+<a id="a4de3429a2fde7dacfbce760109a324d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4de3429a2fde7dacfbce760109a324d4">&#9670;&nbsp;</a></span>getDescription()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;std::string&gt; mogli::lib::GameEntry::getDescription </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the game's description as it is inferred from the folder's content. </p>
+<dl class="section return"><dt>Returns</dt><dd>The game's description or an empty optional if it could not be inferred. </dd></dl>
+
+</div>
+</div>
+<a id="a946e2cd1bf4aa7b93f6f33f160d6d4d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a946e2cd1bf4aa7b93f6f33f160d6d4d3">&#9670;&nbsp;</a></span>getDeveloper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; mogli::lib::GameEntry::getDeveloper </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the developer of the game as it is specified in the yaml file. </p>
+<dl class="section return"><dt>Returns</dt><dd>The developer of the game if it is specified and an empty optional otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="abcfcade7b9d687c5cde5a79e624735ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcfcade7b9d687c5cde5a79e624735ed">&#9670;&nbsp;</a></span>getHint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;std::string&gt; mogli::lib::GameEntry::getHint </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Extracts the specified hint from the filename and returns it. If the hint was not present, an empty optional is returned instead. </p>
+<p>Extracts the specified hint from the filename and returns it. If the hint was not present, an empty optional is returned instead. A hint is a character-sequence of the form <code>[key-value]</code> within the filename. For example, executing <code>getHint("myhint")</code> on a file named <code>myfilename [myhint-the value]</code> will return <code>the value</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key of the hint to extract. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Empty, if the key was not found. The value of the hint otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="ab299bb24092ff4b507ef7c1f6627ed81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab299bb24092ff4b507ef7c1f6627ed81">&#9670;&nbsp;</a></span>getInfoEntry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;T&gt; mogli::lib::GameEntry::getInfoEntry </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves a key from the info.yml file describing metadata of this game entry. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>T </dd></dl>
+
+</div>
+</div>
+<a id="a68943002c7121db441286145a6547954"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68943002c7121db441286145a6547954">&#9670;&nbsp;</a></span>getInfoEntryNode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;ryml::ConstNodeRef&gt; mogli::lib::GameEntry::getInfoEntryNode </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the yaml tree node associated with the provided path. If the path does not exist, empty is returned. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::optional&lt;ryml::NodeRef&gt; </dd></dl>
+
+</div>
+</div>
+<a id="a6239ca279c8929eb09838f275f179458"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6239ca279c8929eb09838f275f179458">&#9670;&nbsp;</a></span>getInstallerFiles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::filesystem::directory_entry&gt; mogli::lib::GameEntry::getInstallerFiles </td>
+          <td>(</td>
+          <td class="paramtype">Platform&#160;</td>
+          <td class="paramname"><em>platform</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the installer files for the specified platform. If none were found, an empty vector is returned. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">platform</td><td>The platform for which to return the installer files. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the installer files for the specified platform. </dd></dl>
+
+</div>
+</div>
+<a id="a7ab5f5c4016b7971b4c82868b135e742"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ab5f5c4016b7971b4c82868b135e742">&#9670;&nbsp;</a></span>getLogo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;std::filesystem::directory_entry&gt; mogli::lib::GameEntry::getLogo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the path to the logo if it exists. </p>
+<dl class="section return"><dt>Returns</dt><dd>The path to the logo or empty if it was not found. </dd></dl>
+
+</div>
+</div>
+<a id="aefbb9b539e542bfe8b689bdd82e88b6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefbb9b539e542bfe8b689bdd82e88b6b">&#9670;&nbsp;</a></span>getName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string mogli::lib::GameEntry::getName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the name of the game as it is inferred from the file name. </p>
+<p>Returns the name of the game as it is inferred from the file name. The game's name is the initial substring that does not consist of the release year or any hints. For example, executing <code><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#aefbb9b539e542bfe8b689bdd82e88b6b" title="Returns the name of the game as it is inferred from the file name.">getName()</a></code> on a file named <code>myfilename [myhint-the value] (2009)</code> will return <code>myfilename</code>.</p>
+<dl class="section return"><dt>Returns</dt><dd>The name of the game.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#aefbb9b539e542bfe8b689bdd82e88b6b" title="Returns the name of the game as it is inferred from the file name.">getName()</a> is the only exception where the info.yaml takes precedence over the filename. </dd></dl>
+
+</div>
+</div>
+<a id="ac2503ce8ce21265a4d0c126e3da650ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2503ce8ce21265a4d0c126e3da650ae">&#9670;&nbsp;</a></span>getPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::filesystem::path mogli::lib::GameEntry::getPath </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the path this game is located at. </p>
+<dl class="section return"><dt>Returns</dt><dd>The path this game is located at. </dd></dl>
+
+</div>
+</div>
+<a id="a53693ab5fbc3f47968d0ed56ffc763e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53693ab5fbc3f47968d0ed56ffc763e6">&#9670;&nbsp;</a></span>getPublisher()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; mogli::lib::GameEntry::getPublisher </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the publisher of the game as it is specified in the yaml file. </p>
+<dl class="section return"><dt>Returns</dt><dd>The publisher of the game if it is specified and an empty optional otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="ad8d47c95559fe4f9789f2bbf035d144b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8d47c95559fe4f9789f2bbf035d144b">&#9670;&nbsp;</a></span>getRating()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;float&gt; mogli::lib::GameEntry::getRating </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the rating of the game as it is specified in the yaml file. </p>
+<p>Returns the rating for the game as it is specified in the yaml file. The rating can be any number in the range from 0 (worst) to <a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a080a0391dd0d711ed668f1c8a625458e">maxRating</a> (best).</p>
+<dl class="section return"><dt>Returns</dt><dd>The rating of the game if it is specified and an empty optional otherwise. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#a080a0391dd0d711ed668f1c8a625458e" title="The highest possible rating.">maxRating</a> </dd></dl>
+
+</div>
+</div>
+<a id="afc4d9e0c5b3cd867fcb4613b71a2fdf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc4d9e0c5b3cd867fcb4613b71a2fdf7">&#9670;&nbsp;</a></span>getReleaseYear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;int&gt; mogli::lib::GameEntry::getReleaseYear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the year of the game's release as it is inferred from the file name. </p>
+<p>Returns the year of the game's release as it is inferred from the file name. The year of the game's release is inferred by a substring satisfying the regex <code>\(\d{4}\)</code>. For example, executing <code><a class="el" href="classmogli_1_1lib_1_1GameEntry.html#afc4d9e0c5b3cd867fcb4613b71a2fdf7" title="Returns the year of the game&#39;s release as it is inferred from the file name.">getReleaseYear()</a></code> on a file named <code>myfilename [myhint-the value] (2009)</code> will return <code>2009</code>.</p>
+<dl class="section return"><dt>Returns</dt><dd>The year of the game's release or an empty optional if it could not be inferred. </dd></dl>
+
+</div>
+</div>
+<a id="aa881d3976933a3ed8049694e3bf5b2f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa881d3976933a3ed8049694e3bf5b2f9">&#9670;&nbsp;</a></span>getScreenshots()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::filesystem::path&gt; mogli::lib::GameEntry::getScreenshots </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the paths or URLs of all the screenshots that were found for the game. </p>
+<dl class="section return"><dt>Returns</dt><dd>the paths or URLs of all the screenshots that were found. </dd></dl>
+
+</div>
+</div>
+<a id="a9a559170164959fb66609b2e38a3b9cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a559170164959fb66609b2e38a3b9cd">&#9670;&nbsp;</a></span>getSupportedPlatforms()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt;Platform&gt; mogli::lib::GameEntry::getSupportedPlatforms </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the platforms for which installers were found. </p>
+<dl class="section return"><dt>Returns</dt><dd>the platforms for which installers were found. </dd></dl>
+
+</div>
+</div>
+<a id="aa5a13ef71af024ce63e0233b18b395b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5a13ef71af024ce63e0233b18b395b7">&#9670;&nbsp;</a></span>getTags()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; mogli::lib::GameEntry::getTags </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the tags (keywords) associated with the game. These are read from the yaml file. </p>
+<dl class="section return"><dt>Returns</dt><dd>The tags (keywords) associated with the game. </dd></dl>
+
+</div>
+</div>
+<a id="a579277018b8f93c1286ebce87ba67df3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a579277018b8f93c1286ebce87ba67df3">&#9670;&nbsp;</a></span>getTrailers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;path_or_url&gt; mogli::lib::GameEntry::getTrailers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the paths or URLs of all the trailers that were found for the game. </p>
+<dl class="section return"><dt>Returns</dt><dd>the paths or URLs of all the trailers that were found. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ac0a5eeeb2148c39ce53559f254a4c9ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0a5eeeb2148c39ce53559f254a4c9ef">&#9670;&nbsp;</a></span>entry</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::filesystem::directory_entry mogli::lib::GameEntry::entry</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The directory that holds this game's informations. </p>
+
+</div>
+</div>
+<a id="aedc8db293f1c66abaee8f5d7111f8677"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedc8db293f1c66abaee8f5d7111f8677">&#9670;&nbsp;</a></span>logger</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">mogli::log::LoggerPtr mogli::lib::GameEntry::logger</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The logger the library manager should write to. </p>
+
+</div>
+</div>
+<a id="a7ebba94d7f1e4c44863dab985ea397d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ebba94d7f1e4c44863dab985ea397d1">&#9670;&nbsp;</a></span>yaml</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;ryml::Tree&gt; mogli::lib::GameEntry::yaml</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The parsed yaml file contents. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>mogli/libmgr/filesystem/<a class="el" href="gameentry_8hpp_source.html">gameentry.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>mogli</b></li><li class="navelem"><b>lib</b></li><li class="navelem"><a class="el" href="classmogli_1_1lib_1_1GameEntry.html">GameEntry</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+  </ul>
+</div>
+</body>
+</html>
